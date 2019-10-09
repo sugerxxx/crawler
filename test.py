@@ -6,3 +6,4 @@ Created on 2019 10 9
 
 if __name__ == '__main__':
     print("aaa")
+    print("aaa")
