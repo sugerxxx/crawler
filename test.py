@@ -36,6 +36,24 @@ class URL(object):
 #     REPEAT_SUBMIT_TOKEN: 03e018fecc5f505b0a49aa0a6fccfb82
     order_ticket_url = "https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs"
     
+    
+    #confirmSingleForQueue POST
+#     passengerTicketStr: O,0,1,胡超晔,1,3101***********031,13764288196,N,00354c139dff29083769e1c5917f7a8bdf31fdf37fadf08f166fde1089db633b8da41d49345f40835659e107069bec7d
+#     oldPassengerStr: 胡超晔,1,3101***********031,1_
+#     randCode: 
+#     purpose_codes: 00
+#     key_check_isChange: 8DC8E9089844A9BBF203D2C85FE6FB4BEC518BE385AB07DC456608E1
+#     leftTicketStr: 6d4vKqIdFlKAPm9592HnxSI0h4BVPZBQMlSVLVNWlegJJUse
+#     train_location: HZ
+#     choose_seats: 
+#     seatDetailType: 000
+#     whatsSelect: 1
+#     roomType: 00
+#     dwAll: N
+#     _json_att: 
+#     REPEAT_SUBMIT_TOKEN: 3c5f5f2c6eecabcee6d18607965bd7a4
+    confirm_single_queue_url = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
+    
 
 class APITool(QObject):
     session = requests.session()
@@ -123,6 +141,52 @@ class APITool(QObject):
                             "leftTicketDTO.to_station": "BJP",
                             "purpose_codes": "ADULT"
             }
+
+        
+        response = cls.session.post(URL.confirm_single_queue_url,data_dict)
+        #https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2019-10-16&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=BJP&purpose_codes=ADULT
+
+#         with open("yzm.jpg","wb") as f:
+#             f.write(response.content)
+        #print(response.content)
+        print(response.json())
+
+        
+        print("complete!")
+    
+    @classmethod    
+    def confirm_Single_for_queue(cls):
+        #     passengerTicketStr: O,0,1,胡超晔,1,3101***********031,13764288196,N,00354c139dff29083769e1c5917f7a8bdf31fdf37fadf08f166fde1089db633b8da41d49345f40835659e107069bec7d
+#     oldPassengerStr: 胡超晔,1,3101***********031,1_
+#     randCode: 
+#     purpose_codes: 00
+#     key_check_isChange: 8DC8E9089844A9BBF203D2C85FE6FB4BEC518BE385AB07DC456608E1   
+#     leftTicketStr: 6d4vKqIdFlKAPm9592HnxSI0h4BVPZBQMlSVLVNWlegJJUse   //ticket info #13字段
+#     train_location: HZ   //ticket info #16字段
+#     choose_seats: 
+#     seatDetailType: 000
+#     whatsSelect: 1
+#     roomType: 00
+#     dwAll: N
+#     _json_att: 
+#     REPEAT_SUBMIT_TOKEN: 3c5f5f2c6eecabcee6d18607965bd7a4
+        print("confirm_Single_for_queue")
+        data_dict = { "passengerTicketStr": "O,0,1,胡超晔,1,3101***********031,13764288196,N,00354c139dff29083769e1c5917f7a8bdf31fdf37fadf08f166fde1089db633b8da41d49345f40835659e107069bec7d",
+                            "oldPassengerStr": "胡超晔,1,3101***********031,1_",
+                            "randCode": "",
+                            "purpose_codes": "00",
+                            "key_check_isChange": "xxxxx",
+                            "leftTicketStr": "xxxxxx",
+                            "train_location":"xxxxx"
+                            "choose_seats":"",
+                            "seatDetailType":"000",
+                            "whatsSelect":1,
+                            "roomType":00,
+                            "dwAll":"N",
+                            "_json_att":"",
+                            "REPEAT_SUBMIT_TOKEN": APITool.globalRepeatSubmitToken
+                            
+            }
         query_ticket_full_url = URL.query_ticket_url
         #for (i=0,i<= len(data_dict))
         
@@ -136,7 +200,6 @@ class APITool(QObject):
 
         
         print("")
-        
 
 
 if __name__ == '__main__':
