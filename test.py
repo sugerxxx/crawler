@@ -8,6 +8,7 @@ Created on 2019 10 9日
 #from PyQt5.Qt import  *
 import requests
 from PyQt5.QtCore import QObject
+from test_kbs import APITool
 
 class URL(object):
     
@@ -58,9 +59,14 @@ class URL(object):
 class APITool(QObject):
     session = requests.session()
     globalRepeatSubmitToken = ""
+    num_of_train = 2
+    key_check_isChange = ""
+    leftTicketStr = ""
+    train_location = ""
+    
     @classmethod
-    def download_yzm(cls):
-        print("download_yzm")
+    def download_yzm(cls):  
+        print("download_yzm (actually set tk in cookies...)")
         response = cls.session.get(URL.yzm_url)
 #         with open("yzm.jpg","wb") as f:
 #             f.write(response.content)
@@ -70,7 +76,7 @@ class APITool(QObject):
 #         print("")
 
         #print(cls.session.cookies)
-        tk = "jGx43w7Yi1YZfVHCA496HkZBhrm96p275V6CbqQookIsdp1p0"
+        tk = "-xWAYDsPOrsGlbumVp8QSwcQow_gkzCV2M42HLl6TBY36p1p0"
         cls.session.cookies.set("tk", tk, domain="kyfw.12306.cn")
         #cls.session.cookies.set("JSESSIONID", "F92C175A6CA7FD502756FAF42717883E")
         #JSESSIONID=F92C175A6CA7FD502756FAF42717883E
@@ -80,7 +86,7 @@ class APITool(QObject):
 
     @classmethod
     def init(cls):
-        print("init")
+        print("init (confirm if I have logined) ")
         response = cls.session.get(URL.init_url)
 #         with open("yzm.jpg","wb") as f:
 #             f.write(response.content)
@@ -116,7 +122,7 @@ class APITool(QObject):
     
     @classmethod
     def init_dc(cls):
-        print("init_dc")
+        print("init_dc  (get the globalRepeatSubmitToken & key_check_isChange)")
         data_dict = { "_json_att": ""
             }
 
@@ -130,29 +136,46 @@ class APITool(QObject):
                 APITool.globalRepeatSubmitToken= line[line.find("'")+1:len(line) -2]
                 print(APITool.globalRepeatSubmitToken)
          
-
+        for line in html_text_lines:
+            if "var" in line:
+                print(line)
+            if "ticketInfoForPassengerForm" in line:
+                print(line)
+                APITool.key_check_isChange= line[line.find("'")+1:len(line)]
+                print(APITool.key_check_isChange)
+    
         
         print("")
+        
     @classmethod
     def query_ticket(cls):
         print("query_ticket")
-        data_dict = { "leftTicketDTO.train_date": "2019-10-16",
+        data_dict = { "leftTicketDTO.train_date": "2019-10-24",
                             "leftTicketDTO.from_station": "SHH",
                             "leftTicketDTO.to_station": "BJP",
                             "purpose_codes": "ADULT"
             }
 
+        query_ticket_url = "https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=" + data_dict["leftTicketDTO.train_date"] + "&leftTicketDTO.from_station=" + data_dict["leftTicketDTO.from_station"] + "&leftTicketDTO.to_station=" + data_dict["leftTicketDTO.to_station"] + "&purpose_codes=" + data_dict["purpose_codes"]
+        print("query_ticket_url: " + query_ticket_url)
+        response = cls.session.get(query_ticket_url)
+        #response = cls.session.get("https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2019-10-16&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=BJP&purpose_codes=ADULT")
         
-        response = cls.session.post(URL.confirm_single_queue_url,data_dict)
         #https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2019-10-16&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=BJP&purpose_codes=ADULT
 
 #         with open("yzm.jpg","wb") as f:
 #             f.write(response.content)
         #print(response.content)
         print(response.json())
-
+        train_info = response.json()["data"]["result"][APITool.num_of_train-1]
+        train_infos = train_info.split("|")
+        print(train_infos)
+        APITool.leftTicketStr = train_infos[12]
+        APITool.train_location = train_infos[15]
+        print(APITool.leftTicketStr ,APITool.train_location)
         
         print("complete!")
+        print("")
     
     @classmethod    
     def confirm_Single_for_queue(cls):
@@ -175,13 +198,13 @@ class APITool(QObject):
                             "oldPassengerStr": "胡超晔,1,3101***********031,1_",
                             "randCode": "",
                             "purpose_codes": "00",
-                            "key_check_isChange": "xxxxx",
-                            "leftTicketStr": "xxxxxx",
-                            "train_location":"xxxxx"
+                            "key_check_isChange": "",
+                            "leftTicketStr": APITool.leftTicketStr ,
+                            "train_location" : APITool.train_location,
                             "choose_seats":"",
                             "seatDetailType":"000",
-                            "whatsSelect":1,
-                            "roomType":00,
+                            "whatsSelect":"1",
+                            "roomType":"00",
                             "dwAll":"N",
                             "_json_att":"",
                             "REPEAT_SUBMIT_TOKEN": APITool.globalRepeatSubmitToken
@@ -190,7 +213,8 @@ class APITool(QObject):
         query_ticket_full_url = URL.query_ticket_url
         #for (i=0,i<= len(data_dict))
         
-        response = cls.session.get("https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2019-10-16&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=BJP&purpose_codes=ADULT")
+        response = cls.session.post(URL.confirm_single_queue_url,data_dict)
+        
         #https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2019-10-16&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=BJP&purpose_codes=ADULT
 
 #         with open("yzm.jpg","wb") as f:
@@ -209,3 +233,4 @@ if __name__ == '__main__':
     #APITool.query_myorder()
     APITool.init_dc()
     APITool.query_ticket()
+    #APITool.confirm_Single_for_queue()
