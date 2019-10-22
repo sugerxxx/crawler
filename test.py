@@ -4,7 +4,7 @@ Created on 2019 10 9日
 
 @author: surface
 '''
-
+#https://blog.csdn.net/taka_is_beauty/article/details/80178382
 #from PyQt5.Qt import  *
 import requests
 from PyQt5.QtCore import QObject
