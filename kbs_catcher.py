@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 '''
-Created on 2019 10月 24日
+Created on 2019 10�� 25��
 
 @author: surface
 '''
@@ -14,23 +14,23 @@ from urllib import parse
 
 class URL(object):
     
-    #query_url GET
-#   https://m.quyundong.com/court/book?bid=22377&t=1572278400&cid=1
-#     1. bid:22377
-#     2. t:1572278400
-#     3. cid:1
-    query_ticket_url = "https://m.quyundong.com/court/book?"
+    #login POST
+#     loginName: qianxt0929
+#     postfix: @tpl.cntaiping.com
+#     password: VHAxMjM0NTY=
+#      Tp123456
+    login_url = "http://10.21.0.2/kbs/login"
     
     #confirm_order GET
 # price[]:40
 # hour[]:7
-# course_name[]:A号场
+# course_name[]:A�ų�
 # real_time[]:7:00-8:00
-# allcourse_name:A号场,B号场,C号场,D号场,
+# allcourse_name:A�ų�,B�ų�,C�ų�,D�ų�,
 # goods_ids:298108643
 # book_date:1572278400
-# court_name:上海市徐汇区青少年水上运动学校
-# category_name:羽毛球
+# court_name:�Ϻ��������������ˮ���˶�ѧУ
+# category_name:��ë��
 # bid:22377
 # cid:1
 # order_type:0
@@ -82,11 +82,11 @@ class APITool(QObject):
                 "hour[]":0,
                 "course_name[]":"",
                 "real_time[]":"",
-                "allcourse_name":"A号场,B号场,C号场,D号场",
+                "allcourse_name":"A�ų�,B�ų�,C�ų�,D�ų�",
                 "goods_ids":0,
                 "book_date":0,
-                "court_name":"上海市徐汇区青少年水上运动学校",
-                "category_name":"羽毛球",
+                "court_name":"�Ϻ��������������ˮ���˶�ѧУ",
+                "category_name":"��ë��",
                 "bid":22377,
                 "cid":1,
                 "order_type":0,
@@ -112,7 +112,23 @@ class APITool(QObject):
         
         }
     
+    @classmethod
+    def login_kbs(cls):
+        print("Step: Login...")
+        data_dict = {'loginName': 'qianxt0929',
+                        'postfix': '@tpl.cntaiping.com',
+                        'password': 'VHAxMjM0NTY='}
+        
+        response = cls.session.post(URL.login_url,data_dict)
 
+        #print(response.content)
+#         print("")
+        #print(response.json)
+#         print("")
+
+        print("Cookies: ", cls.session.cookies)
+        print("Step complete!")
+        print("")
             
     
     @classmethod
@@ -220,6 +236,5 @@ class APITool(QObject):
 
 if __name__ == '__main__':
 
-    APITool.query_ticket()
-    APITool.confirm_order()    
-    #APITool.doorder()
+    APITool.login_kbs()
+

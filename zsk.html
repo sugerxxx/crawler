@@ -1,0 +1,2338 @@
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="applicationId" content="554801">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="pragram" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, must-revalidate">
+    <title>知识库</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.2-dist/css/bootstrap-blue.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/kmpro-blue.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <!-- 顶部搜索范围下拉多选框 -->
+    <link rel="stylesheet" href="/static/css/sumoselect.css" type="text/css">
+
+    <script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap-3.3.2-dist/js/bootstrap.js"></script>
+    <!--[if lte IE 8]>
+    <script type="text/javascript" src="/static/js/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/js/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/static/js/bootstrap.autocomplete.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ztree.core-3.5.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ztree.excheck-3.5.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ztree.exedit-3.5.js"></script>
+    <script type="text/javascript" src="/static/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/static/js/validation/js/jquery.validate.js"></script>
+    <script type="text/javascript" src="/static/js/validation/js/lib/jquery.metadata.js"></script>
+    <script type="text/javascript" src="/static/js/validation/js/validate-ex.js"></script>
+    <script type="text/javascript" src="/static/js/validation/js/messages_cn.js"></script>
+    <script type="text/javascript" src="/static/js/common.js"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({
+//            cache: false //close AJAX cache
+        });
+    </script>
+    <!-- default.jsp -->
+    <!-- 顶部搜索范围下拉多选框 -->
+    <script type="text/javascript" src="/static/js/jquery.sumoselect.js"></script>
+</head>
+<body>
+
+<div
+        
+class="container mt-px5 mb-px15" style="width:100%;">
+    
+<style type="text/css">
+    em {
+        color: #FF0000
+    }
+
+    
+    /* 智能搜索轨迹css -start */
+    .progress_bar .pro-bar {
+        background: #eee;
+        height:4px;
+        margin-bottom: 12px;
+        margin-top: 40px;
+        position: relative;
+    }
+    .progress_bar .progress_bar_title{
+        color: #333;
+        position: relative;
+        top: -24px;
+        z-index: 1;
+        padding-right: 50px;
+    }
+    .progress_bar .progress_number{
+        position: absolute;
+        top: 2px;
+        right: 0;
+        font-size: 12px;
+    }
+    .progress_bar .progress-bar-inner {
+        display: block;
+        width: 0;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: width 1s linear 0s;
+        animation: animate-positive 2s;
+    }
+    .progress_bar:nth-child(3) .progress-bar-inner{
+        background-color: #ed687c;
+    }
+    .progress_bar:nth-child(4) .progress-bar-inner{
+        background-color: #fdba04;
+    }
+    .progress_bar:nth-child(5) .progress-bar-inner{
+        background-color: #1abc9c;
+    }
+    .progress_bar:nth-child(6) .progress-bar-inner{
+        background-color: #049dff;
+    }
+    .progress_bar .progress-bar-inner{
+        background-color: #989898;
+    }
+    .progress_bar .progress-bar-inner:before {
+        content: "";
+        background-color: hsl(0, 0%, 100%);
+        border-radius: 50%;
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        right: 1px;
+        top: 0;
+        z-index: 1;
+    }
+    .progress_bar .progress-bar-inner:after {
+        content: "";
+        width: 14px;
+        height: 14px;
+        background-color: inherit;
+        border-radius: 50%;
+        position: absolute;
+        right: -4px;
+        top: -5px;
+    }
+    @-webkit-keyframes animate-positive{
+        0% { width: 0%; }
+    }
+    @keyframes animate-positive{
+        0% { width: 0%; }
+    }
+    .over-hidden{
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .index-title-y {
+        height: 30px;
+        background: url(/static/images/line_bj.jpg) repeat-x left bottom;
+    }
+    .height_30{
+        height: 30px;
+        font-size: 16px;
+        padding-right: 10px;
+        border-bottom: 1px solid #3689b3;
+    }
+    .display-ib {
+        display: inline-block;
+    }
+    /* 智能搜索轨迹css -end */
+
+</style>
+
+<form id="frm_search_hidden" action="/kbs/search" method="get">
+    <input id="input_q" type="hidden" name="q" value="福禄康瑞"/>
+    <input id="input_st" type="hidden" name="st" value="TYPE_FULLTEXT"/>
+    
+    <input id="input_max_sq" type="hidden" value=""/>
+    <input id="input_cd" type="hidden" name="cd" value=""/>
+    <input id="input_dd" type="hidden" name="dd" value=""/>
+    <input id="input_pd" type="hidden" name="pd" value=""/>
+    <input id="input_sf" type="hidden" name="sf" value=""/>
+    
+    
+    
+</form>
+<script type="text/javascript" src="/static/js/echarts.js"></script>
+<script language="javascript">
+    $(document).ready(function () {
+
+//        $("#main").css("display", "none"); //隐藏
+            // 基于准备好的dom，初始化echarts实例var
+            var myChart = echarts.init(document.getElementById('echartsmain'));
+            var option = {
+                animation: false,
+                xAxis: {
+                    name:'category',
+                    show:false,
+                    type: 'category',
+                    data:[],
+                    // boundaryGap: [0, 0],
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    show:false,
+                    type: 'value',
+                    axisTick: {
+                        inside: true
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        inside: true,
+                        formatter: '{value}\n'
+                    },
+                    z: 10
+                },
+                grid: {
+                    top: 30,
+                    left: 15,
+                    right: 15,
+                    height: 160
+                },
+                dataZoom: [{
+                    type: 'inside',
+                    throttle: 50
+                }],
+                series: [
+                    {
+                        type:'line',
+                        smooth: true,
+                        symbol: 'emptyCircle',
+                        symbolSize: 8,
+                        itemStyle: {
+                            normal: {
+                                color: '#d68262'
+                            }
+                        },
+                        label:{
+                            show:true,
+                            formatter: '{b}\n {@category}%'
+
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                    offset: 0,
+                                    color: '#d68262'
+                                }, {
+                                    offset: 1,
+                                    color: '#ffe'
+                                }])
+                            }
+                        },
+                        data: []
+                    }
+
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        // $(".bg_fff_p10").removeClass();
+        $("#echartsmain").css("display", "none"); //隐藏
+    });
+
+    function list_page(e) {
+        alert(e);
+    }
+    function search_sort(v) {
+        $("#input_sf").val(v);
+        $("#frm_search_hidden").submit();
+    }
+    function drill(f, v) {
+        if (f == 1) {
+            $("#input_cd").val(v);
+        }
+        if (f == 2) {
+            $("#input_dd").val(v);
+        }
+        if (f == 3) {
+            $("#input_pd").val(v);
+        }
+        $("#frm_search_hidden").submit();
+    }
+
+    function second_search() {
+        sq_val = $("#input_sq").val();
+        if (sq_val.length == 0) {
+            $("#input_sq_hit").text("请输入关键字");
+            return;
+
+        }
+        $("#frm_search_hidden").append('<input type="hidden" name="sq" value="' + sq_val + '" />');
+        $("#frm_search_hidden").submit();
+    }
+
+    function remove_and_submit(id) {
+        $("#" + id).remove();
+        $("#frm_search_hidden").submit();
+    }
+
+    $(function () {
+        $('#input_sq').keyup(function (e) {
+            if (e.which == 13) {
+                second_search();
+            }
+        });
+    });
+    function ck_on(){
+            $("#echartsmain").css("display", "block");
+            $("#ckon").css("display", "none");
+            $("#ckoff").css("display", "block");
+        };
+        function ck_off(){
+            $("#echartsmain").css("display", "none");
+            $("#ckon").css("display", "block");
+            $("#ckoff").css("display", "none");
+        };
+</script>
+<div style="width: 100%;" class="row no_padding no_margin">
+    <div class="col-md-9 pl-mini0 mt-middle">
+        
+        
+            <div id="echartsmain" style="width:100%;height:200px;"></div>
+        
+        <div class="bg_fff_p10">
+            <p class="lead text-right">
+                全文搜索
+                <mark class="color-red ml-mini-mini mr-mini-mini">福禄康瑞</mark>
+                找到相关<span class="color-red ml-mini-mini mr-mini-mini">118</span>项结果
+                <!--搜索耗时<mark>0.295</mark> --> </p>
+            
+            <ul class="list-unstyled list-inline mt-mini-mini" style="padding-bottom: 10px">
+                
+                
+                
+                
+            </ul>
+
+            <div class="panel panel-info mt-mini">
+                <div class="panel-body" style="padding:10px 15px;">
+                    排序：
+                    
+                        
+                            默认排序&nbsp;&nbsp;
+                        
+                        
+                    
+
+                    
+                        
+                        
+                            <a href="#" onclick="search_sort('updateTime');" class="red_honver mr_sm">更新时间</a>&nbsp;&nbsp;
+                        
+                    
+
+                    
+                        
+                        
+                            <a href="#" onclick="search_sort('click');" class="red_honver mr_sm">点击量</a>
+                        
+                    
+                </div>
+            </div>
+
+            <!--知识点置顶关键字-->
+            
+            <!--知识点置顶关键字end-->
+            
+
+            
+                <div class="list-group">
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/22af688e-fe10-49be-abf7-0089a292a8e5?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>FAQ
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">险可继续交费保留。11、保险费豁免后，是否可以进行年金转换或者退保？可以进行年金转换或者退保。12、<em>福</em><em>禄</em><em>康</em><em>瑞</em>轻症赔付后是否影响保单现金价值？轻症赔付不影响现金价值。13、新旧款的条款的区别在哪里？/新</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d554ddece283868816">太平人寿>FAQ汇总>产品FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.3
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-07-16 14:08
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/854271d7-c8c0-4f8c-a396-5bb4fa40507c?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>2018——4040
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">产品注意:1、本产品犹豫期10天销售时间：机构代码及名称险种代码及名称申请事由开售时间停售时间缴别内蒙古4040-<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018停售——2019年5月21日零时10年云南昆明中支4040-<em>福</em><em>禄</em><em>康</em><em>瑞</em></p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/4a8f644d-5b8e-4244-a7a6-7ece6e9913d7" target="_blank">太平寿发〔2019〕98号太平人寿关于全渠道产品“太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018终身重大疾病保险”退市的通知</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/b3047b37-47b8-48b8-8d2d-0ed6575d3872" target="_blank">福禄康瑞2018（4040）2019年第二季度规则调整-20190412</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/265e947b-147f-4633-b2cf-b8c6c31cc27c" target="_blank">（银保）福禄康瑞2018（4040）2019年第二季度规则调整-20190412</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/2f344fa9-9bdd-4640-b114-7cc83b37975c">太平人寿>太寿产品>电销、网销产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1dc0c99454320025448">太平人寿>产品知识>电销网销>电销、网销产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47f933f9184409198">太平人寿>产品知识>银险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v8.9
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-06-12 17:28
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/8b702974-2163-432f-b905-c4293b07b066?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>2018（折标、佣金、新业务价值）
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">福禄康瑞2018（折标、佣金、新业务价值）</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/2e0aae6e-5a1e-4a5f-871e-6153fff99352" target="_blank">太平寿发〔2018〕194号太平人寿关于全渠道产品“太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018终身重大疾病保险”上市的通知</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/08351bd9-32fa-41b9-8a5d-ed774519a301" target="_blank">4-太平福禄康瑞2018终身重大疾病保险折标系数</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/848fb614-de7c-4f5b-9642-bbe5a38b9d23">太平人寿>太寿产品>个险产品>在售> 佣金折标系数新业务价值</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/54775e3b-6d94-4b16-9249-eb1c0f91e476">太平人寿>太寿产品>银险产品>在售> 佣金折标系数新业务价值</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/5aa57f2b-9b96-4d5c-93cb-e641b8c976b3">太平人寿>太寿产品>电销、网销产品>在售> 佣金折标系数新业务价值</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/848fb614-de7c-4f5b-9642-bbe5a38b9d23">太平人寿>太寿产品>个险产品>在售> 佣金折标系数新业务价值</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-07-13 19:21
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/17ff19cc-43e9-45aa-af65-3574181c4ba0?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病---1264
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">20180710更新关于开展“太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险”客户保单权益升级活动的通知 根据业务需求，对该产品部分病种定义进行优化，完善产品条款描述。以增值服务方式，升级所有购买老<em>康</em><em>瑞</em>产品客户的重疾</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/828fb5a7-1c9a-4493-9eec-ff02868dbcd0" target="_blank">关于太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险等个险产品在全国范围（海南除外）停止销售的通知20180622</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v6.1
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-08-02 17:11
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/5ca9dfaa-2074-4385-afd0-a4f60782a9aa?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>2018——产品介绍短信模板
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">感谢您关注《太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018终身重大疾病保险》，这是一款提供100种重疾、50种轻症、身故、豁免及养老的终身保障产品，主要保险责任：1、重大疾病保险金；2、特定疾病保险金；3、身故保险金。详情可</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/55c80f72749c9200888521">太平人寿>知识库常见短信模板>热门产品介绍</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-07-26 17:41
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/f6681691-541f-4d53-b3ff-cc5e96d5e92c?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>2018——4040产品FAQ
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">任中约定的重大疾病保险金及身故保险金的其中一项保险金。赔付重疾后，身故不再进行任何赔付。4.你们这款保险除了保健<em>康</em>，还可以养老吗？A：在被保险人健健<em>康</em><em>康</em>未出险的情况下，合同满20个保单周年后可以转换年</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d554ddece283868816">太平人寿>FAQ汇总>产品FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/26fd2f71-fea0-4b04-89d9-99cad3104744">太平人寿>太寿产品>微销产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/2f344fa9-9bdd-4640-b114-7cc83b37975c">太平人寿>太寿产品>电销、网销产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-07-26 17:39
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/a2a66954-7bc6-453a-9186-edadef4bf24d?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病---3227
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">20180802更新：关于开展“太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险”客户保单权益升级活动的通知     根据业务需求，对该产品部分病种定义进行优化，完善产品条款描述。以增值服务方式，升级所有购买老<em>康</em><em>瑞</em>产品</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/5bb9d0ff-4dc8-4964-b3b0-6265d2a50eb7" target="_blank">关于太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险等个险产品在全国范围（海南除外）停止销售的通知</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47f933f9184409198">太平人寿>产品知识>银险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v2.3
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-11-21 19:08
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/2695c060-cda7-4542-9226-bc4f7a3cd3dc?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病---产品介绍短信模板
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">感谢您关注《太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险》，这是一款集重疾、特定疾病、身故保障、豁免、养老规划于一身的长期重疾产品。主要保险责任：1.重疾保险金（100种）；2. 特定疾病保险金（50种）；3、身故</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/55c80f72749c9200888521">太平人寿>知识库常见短信模板>热门产品介绍</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-02-06 09:49
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/72245c49-add5-403c-b008-8a213a6cb3d2?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病---3227（折标、佣金、新业务价值）
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">福禄康瑞终身重大疾病---3227（折标、佣金、新业务价值）</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/a2b1c297-7b01-4206-8815-15a38d2b7b06" target="_blank">4-太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险折标</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-05-31 14:24
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/0c8c1a11-9661-4f65-a4c0-de3360abe915?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">2019年“守护接力，共享太平”太平90周年<em>福</em><em>禄</em><em>康</em><em>瑞</em>个险客户大回访活动
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">此活动为个险活动，如有问题：下发“预约与咨询工单-疑难问题-机构活动”工单活动针对客户：针对2019年2月23日24时之前所有拥有<em>福</em><em>禄</em><em>康</em><em>瑞</em>或<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018产品保单的老客户（自保件不参与抽奖，但可以</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/7b083092-7718-4647-b7d4-734ccac98766" target="_blank">90周年<em>康</em><em>瑞</em>大回访0226【下发版-操作手册】</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/50c8870a75a91661826949">太平人寿>公司信息>公司活动>正开展活动>全系统活动</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v4.4
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-04-01 10:22
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/a670166b-2ab6-4f16-9767-8ee978d7d309?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">恶性肿瘤特药——4049产品FAQ
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">Q1：投保规则中—注意里的第3项“售渠道有立保通和太平保宝，但太平保宝仅支持投保<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018。”太平保宝是指微信端还是APP？A：app</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d554ddece283868816">太平人寿>FAQ汇总>产品FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.1
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-04-16 13:24
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/7a2a9f7c-c346-48f1-9d8b-718e4d36f655?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">2019年3月健<em>康</em>险冲刺组合投保运营规则
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">、未提及部分，参见目前执行的个险投保规则。<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018（4040）+真爱健<em>康</em>（1075）+超e保2018（4021）+特药险（4049）+附加寰亚医疗险（4051）组合投保运营规则一、投保年龄、交费</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/1ae2c9cc-14ab-4899-8a3c-4087f05093ce" target="_blank">立保通组合销售规则20190226</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/5f4b4e62-851f-40d1-b708-b449493a0dd9" target="_blank">组合投保-<em>康</em><em>瑞</em>+超e保+特药险运营规则</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1cea5761b3066674699">太平人寿>产品知识</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/c49717f1-78b5-402e-8c0b-9900c7450a7f">太平人寿>热门问答>历年健康险方案>2019年健康险方案</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.3
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-03-13 11:09
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/3390dcf4-4745-40f9-b8fb-a13058db8df1?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">附加共享荣耀重疾——4063
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">太平附加共享荣耀多次给付重大疾病保险运营规则（个险）投保规则：一、投保年龄：28天-65周岁二、交费期间：趸交、5年、10年、15年、20年三、保险期间：终身四、本产品须与<em>福</em><em>禄</em><em>康</em><em>瑞</em> 2018（404</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/b96d7bc7-7880-4150-922c-c761723296df" target="_blank">太平附加共享荣耀多次给付重大疾病保险运营规则（个险）</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.6
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-09-03 18:49
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/31af1183-a4bc-4af8-980c-e83d76bdeaec?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福禄</em>嘉倍终身重大疾病---4068 产品FAQ
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">健<em>康</em>险是否能继续交费承保？A：豁免情况下，原附加险可继续交费保留。3.保险费豁免后，是否可以进行年金转换或者退保？A：可以进行年金转换或者退保。其他：1.福禄嘉倍和<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018有什么不同？A：这两</p>
+                            <dl>
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d554ddece283868816">太平人寿>FAQ汇总>产品FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.3
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-07-16 14:21
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/7c30c016-04ac-4f0d-8075-c5643dbf87d2?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">共享荣耀护理保险——4061
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">年金险或1206时，本产品按照基本保险金额1倍累计入重大疾病产品风险保额。七、搭配产品八、2019年3月1日至2019年5月31日投保<em>福</em><em>禄</em><em>康</em><em>瑞</em> 2018（4040）、<em>福</em><em>禄</em><em>康</em><em>瑞</em>（1264）或福禄倍佑组合</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/3a078e01-a807-4a45-96e5-ee056f8e8b8c" target="_blank">3-太平共享荣耀护理保险运营规则（银险）20190429</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.6
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-06-26 17:39
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/64690225-9500-40d5-9b96-c28a97e9115b?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">共享荣耀心脑血管疾病——4062
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">月31日投保<em>福</em><em>禄</em><em>康</em><em>瑞</em> 2018（4040）、<em>福</em><em>禄</em><em>康</em><em>瑞</em>（1264）或福禄倍佑组合（12351236），标准体承保且过犹豫期，且该有效重疾保单不处于申请理赔或已理赔状态，2019年5月31日之前可单独投保</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/83d43e93-a97d-409e-8e00-2b2c3364ace3" target="_blank">太平共享荣耀特定心脑血管疾病保险培训课件 (个险第一版）20190429</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.4
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-05-27 09:30
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/abe964d8-361f-434f-bd4e-c90c62a44743?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">个险：医无忧------1242
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">21203）福利金佑组合（12291230）福禄倍佑组合（12351236）乐享无忧（1241）悦享无忧组合（12441245）成长无忧（1252）福禄<em>康</em>逸（1263）<em>福</em><em>禄</em><em>康</em><em>瑞</em>(1264)<em>福</em><em>禄</em><em>康</em><em>瑞</em>2018（404</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/85a5ec8f-daa2-4d94-9a0b-bb69fe25f884" target="_blank">太平医无忧医疗保险（1242）运营规则调整2018年8月22日（个险）</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v5.9
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-05-10 10:29
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/25da1640-542b-4d92-94f2-6fe4fba6612d?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">2019年寿险半年度业务冲刺方案（非客户知晓）
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">新增</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pptx.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/98267f75-1dc4-4d77-a271-ac43632ef334" target="_blank">2019年半年度业务冲刺运营支持保障</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/8c5a5bd1-9339-4540-bbe0-82a9006f52a1">太平人寿>热门问答>重要业务冲刺方案>2019年重要业务冲刺方案</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.1
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-06-24 09:08
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/728e0b72-fb7d-424a-a82d-3f88391d777a?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank">医无忧---4024（折标、佣金、新业务价值）
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini">医无忧---4024（折标、佣金、新业务价值）</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/4e3f2852-dd40-4f64-a60c-fa446c2b9c7c" target="_blank">太平寿发〔2018〕133号太平人寿关于银保产品“太平<em>福</em><em>禄</em><em>康</em><em>瑞</em>终身重大疾病保险”等上市的通知</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/54775e3b-6d94-4b16-9249-eb1c0f91e476">太平人寿>太寿产品>银险产品>在售> 佣金折标系数新业务价值</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.0
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2018-05-31 14:24
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                        
+                        <div class="list-group-item">
+                            <p class="font-s16"><a href="lore/view/a713782f-7dc3-43e1-93be-51bb361baac1?q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E&sysn=&serial=bee8a9f1-d303-4135-9d68-b9b8c87a91bc" target="_blank"><em>福禄</em>嘉倍终身重大疾病---4068
+                                
+                            </a></p>
+                            <p class="text-muted mt-m-mini"> 日（含） 前（1） 本产品与<em>福</em><em>禄</em><em>康</em><em>瑞</em>系列产品（1264， 4040， 3227， 4044） 各渠道共同累计重疾和寿险风险保额， 执行投保通则的体检和财务核保规则。（2） 如果本产品与<em>福</em><em>禄</em><em>康</em><em>瑞</em>系列产品</p>
+                            <dl>
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/8e0c3b5a-2917-4969-a70a-79d105737dcc" target="_blank">1-太平<em>福禄</em>嘉倍终身重大疾病保险条款</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/148e9549-6a6e-4d9c-b203-22c8278e9589" target="_blank">3-太平福禄嘉倍终身重大疾病保险运营规则（个险）</a></dt>
+                                    
+                                
+                                    <dt class="mt-mini">
+
+
+
+
+
+
+<img src="/static/images/filetype/pdf.gif" class="thumbnail-icon"/>
+
+<a href="/kbs/file/show/attachment/02882886-4633-4cad-bd8f-4333cbe586d3" target="_blank">3-太平福禄嘉倍终身重大疾病保险运营规则（银险）</a></dt>
+                                    
+                                
+                            </dl>
+
+                            <p class="list-inline color-gray" style="padding: 5px">
+                                <small>
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47736c07594613821">太平人寿>产品知识>个险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/f7dcf674-1b8e-4e9c-97b6-813417daee71">太平人寿>太寿产品>个险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/4ec1d47f933f9184409198">太平人寿>产品知识>银险产品</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;<a target="_blank" href="/kbs/home/cc/ccc5f19f-0828-46dd-99cc-130a084e26d5">太平人寿>太寿产品>银险产品>在售>产品基本信息及FAQ</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </small>
+                            </p>
+                            <p class="">
+                                <small class="text-w color-gray">
+                                        <span class="label label-success ">
+
+
+
+
+v1.5
+
+</span>
+                                    &nbsp;&nbsp;更新时间：
+                                    
+
+
+
+
+
+
+
+
+
+2019-09-02 11:23
+
+
+                                    &nbsp;&nbsp;有效期：
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+                                    -
+                                    
+
+
+
+
+
+
+
+
+
+
+
+</small>
+                            </p>
+                        </div>
+
+                    
+                </div>
+                <div class="form-group"><span class="input-error" id="input_sq_hit"></span>
+
+                    <div class="input-group col-sm-5">
+                        <input class="form-control" id="input_sq" type="text" name="sq"
+                               maxlength="50"/>
+                                                  <span class="input-group-btn">
+                                                    <button id="secondSearch" type="button" class="btn btn-primary"
+                                                            onclick="second_search();">二次搜索
+                                                    </button>
+                                                  </span>
+
+
+                    </div>
+                </div>
+
+                <div>
+                    相关搜索：
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e2018%e7%bb%88%e8%ba%ab%e9%87%8d%e5%a4%a7%e7%96%be%e7%97%85%e4%bf%9d%e9%99%a9+%e5%a4%9a+&st=TYPE_FULLTEXT">太平福禄康瑞2018终身重大疾病保险 多  </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e%e7%bb%88%e8%ba%ab%e9%87%8d%e5%a4%a7%e7%96%be%e7%97%85%e4%bf%9d%e9%99%a9+%e5%a4%9a&st=TYPE_FULLTEXT">太平福禄康瑞终身重大疾病保险 多 </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e%e7%bb%88%e8%ba%ab%e9%87%8d%e5%a4%a7%e7%96%be%e7%97%85%e4%bf%9d%e9%99%a9+%e5%a4%9a+&st=TYPE_FULLTEXT">太平福禄康瑞终身重大疾病保险 多  </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e2018%e7%bb%88%e8%ba%ab%e9%87%8d%e5%a4%a7%e7%96%be%e7%97%85%e4%bf%9d%e9%99%a9+%e5%a4%9a&st=TYPE_FULLTEXT">太平福禄康瑞2018终身重大疾病保险 多 </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84+%e5%ba%b7%e7%91%9e&st=TYPE_FULLTEXT">太平福禄 康瑞 </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e2018%e7%bb%88%e8%ba%ab%e9%87%8d%e5%a4%a7%e7%96%be%e7%97%85%e4%bf%9d%e9%99%a9+%e5%a4%9a&st=TYPE_FULLTEXT">福禄康瑞2018终身重大疾病保险 多 </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e5%a4%aa%e5%b9%b3%e7%a6%8f%e7%a6%84+%e5%ba%b7%e7%91%9e2018&st=TYPE_FULLTEXT">太平福禄 康瑞2018 </a>
+                    
+                        
+                        <a href="/kbs/search?q=%e7%a6%8f%e7%a6%84%e5%ba%b7%e7%91%9e2018+%e9%93%b6%e9%99%a9&st=TYPE_FULLTEXT">福禄康瑞2018 银险 </a>
+                    
+                </div>
+                <div class="text-center mt-px15">
+
+
+
+
+
+
+
+
+
+
+    <ul class="pagination mt-mini">
+
+        
+        <li class="disabled"><a href="#">&lt;&lt;</a></li>
+        <li class="disabled"><a href="#">&lt;</a></li>
+        
+
+        
+            
+                
+                    <li class="active"><a href="?page=1&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">1</a></li>
+                
+                
+            
+        
+            
+                
+                
+                    <li><a href="?page=2&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">2</a></li>
+                
+            
+        
+            
+                
+                
+                    <li><a href="?page=3&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">3</a></li>
+                
+            
+        
+            
+                
+                
+                    <li><a href="?page=4&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">4</a></li>
+                
+            
+        
+            
+                
+                
+                    <li><a href="?page=5&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">5</a></li>
+                
+            
+        
+            
+                
+                
+                    <li><a href="?page=6&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">6</a></li>
+                
+            
+        
+
+        
+        <li><a href="?page=2&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">&gt;</a></li>
+        <li><a href="?page=6&&st=TYPE_FULLTEXT&q=%E7%A6%8F%E7%A6%84%E5%BA%B7%E7%91%9E">&gt;&gt;</a></li>
+        
+        <li class="disabled"><a href="#">118</a></li>
+    </ul>
+
+</div>
+            
+        </div>
+    </div>
+    <div class="col-md-3 mt-middle pl-mini-mini pr-mini0">
+        <div class="bg_fff_p10">
+
+            
+            <iframe id="main" src="/kbs/search/content/福禄康瑞" width="100%" frameborder="0" height="300px"></iframe>
+            <!--智能轨迹推荐路线-->
+            <div>
+                
+            </div>
+            <!--智能轨迹推荐路线  end-->
+
+            
+                
+                    <div class="index-title mb-mini">
+                    	<span class="title bor_b_blue pr-mini pl-mini display-ib height_30">
+                            
+                                
+                                    按分类
+                                
+                                
+                                
+                            
+                        </span>
+                    </div>
+                    <ul class="list-unstyled mb-mini">
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(1,'/太平人寿/'); ">
+                                    /太平人寿/ <span class="badge" style="font-size: 75%">117</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(1,'/公共资源中心/'); ">
+                                    /公共资源中心/ <span class="badge" style="font-size: 75%">1</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(1,'/太平财险/'); ">
+                                    /太平财险/ <span class="badge" style="font-size: 75%">1</span>
+                            </li>
+                        
+                    </ul>
+                
+            
+                
+                    <div class="index-title mb-mini">
+                    	<span class="title bor_b_blue pr-mini pl-mini display-ib height_30">
+                            
+                                
+                                
+                                
+                                    按时间
+                                
+                            
+                        </span>
+                    </div>
+                    <ul class="list-unstyled mb-mini">
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(2,'1571673600000'); ">
+                                    最近一天 <span class="badge" style="font-size: 75%">0</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(2,'1571155200000'); ">
+                                    最近一周 <span class="badge" style="font-size: 75%">1</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(2,'1569168000000'); ">
+                                    最近一月 <span class="badge" style="font-size: 75%">13</span>
+                            </li>
+                        
+                    </ul>
+                
+            
+                
+                    <div class="index-title mb-mini">
+                    	<span class="title bor_b_blue pr-mini pl-mini display-ib height_30">
+                            
+                                
+                                
+                                    按属性
+                                
+                                
+                            
+                        </span>
+                    </div>
+                    <ul class="list-unstyled mb-mini">
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/是否在售/'); ">
+                                    /是否在售/ <span class="badge" style="font-size: 75%">53</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/销售渠道/'); ">
+                                    /销售渠道/ <span class="badge" style="font-size: 75%">53</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/保障期限/'); ">
+                                    /保障期限/ <span class="badge" style="font-size: 75%">52</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/主/附险/'); ">
+                                    /主/附险/ <span class="badge" style="font-size: 75%">51</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/产品功能/'); ">
+                                    /产品功能/ <span class="badge" style="font-size: 75%">51</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/增值方式/'); ">
+                                    /增值方式/ <span class="badge" style="font-size: 75%">49</span>
+                            </li>
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(3,'/寿险机构属性（按首字母顺序）/'); ">
+                                    /寿险机构属性（按首字母顺序）/ <span class="badge" style="font-size: 75%">8</span>
+                            </li>
+                        
+                    </ul>
+                
+            
+                
+                    <div class="index-title mb-mini">
+                    	<span class="title bor_b_blue pr-mini pl-mini display-ib height_30">
+                            
+                                
+                                
+                                
+                                    按时间
+                                
+                            
+                        </span>
+                    </div>
+                    <ul class="list-unstyled mb-mini">
+                        
+                            <li class="pointer mb-mini-mini" onclick="drill(4,'sysn'); ">
+                                     <span class="badge" style="font-size: 75%">0</span>
+                            </li>
+                        
+                    </ul>
+                
+            
+        </div>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>
