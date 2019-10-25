@@ -169,8 +169,8 @@ class APITool(QObject):
                 APITool.doconfirm_dict["bid"] = soup2.input["value"]
                 
         print("order_dict:")
-        for item in APITool.order_dict.items():
-            print(item.key,item.value)
+        for key,value in APITool.order_dict.items():
+            print(key,value)
 #    
         
         print("Step complete!")
@@ -199,8 +199,8 @@ class APITool(QObject):
         APITool.doconfirm_dict["_"] =  str(int (time.time() )*1000) 
         
         print("doconfirm_dict:")
-        for item in APITool.doconfirm_dict.items():
-            print(item.key,item.value)
+        for key,value in APITool.doconfirm_dict.items():
+            print(key,value)
         print("Step complete!")
         print("")
 
@@ -222,4 +222,4 @@ if __name__ == '__main__':
 
     APITool.query_ticket()
     APITool.confirm_order()    
-    #APITool.doorder()
+    APITool.doorder()

@@ -10,6 +10,7 @@ import time
 from PyQt5.QtCore import QObject
 from bs4 import BeautifulSoup
 from urllib import parse
+import os
 
 
 class URL(object):
@@ -20,6 +21,24 @@ class URL(object):
 #     password: VHAxMjM0NTY=
 #      Tp123456
     login_url = "http://10.21.0.2/kbs/login"
+    
+    #query product GET
+#     categoryId: 4ec1cea5761b3066674699
+# listStyle: 1
+# order: 
+# sort: 
+# channelId: 4ec20e1b90005754930649
+# fieldId_4ec20e5963750377023276: 4ec20e5963750377023276
+# fieldValue_4ec20e5963750377023276: 1099
+# fieldId_4ec20e4de2876883038462: 4ec20e4de2876883038462
+# fieldValue_4ec20e4de2876883038462: 
+# start: 
+# end: 
+# _: 1571982800783
+    query_product_url = "http://10.21.0.2/kbs/retrieve/ajax-list?"
+    
+    
+    kbs_base_url = "http://10.21.0.2"
     
     #confirm_order GET
 # price[]:40
@@ -71,10 +90,24 @@ class APITool(QObject):
                          "wx_userToken":"f4%2BK5oSubzEXyeoVhyLDAIVrEA"
                          }
     
-    badminton_info_dict = {
-                        "bid":22377,
-                        "t":  int (time.mktime( time.strptime('2019-10-29','%Y-%m-%d') )  ),
-                        "cid":1
+    #product_list = [1099,4041]
+    product_list = [4041]
+    
+    product_url_dict = {}
+    
+    query_product_dict = {
+                        "categoryId": "4ec1cea5761b3066674699",
+                        "listStyle": "1",
+                        "order": "",
+                        "sort": "",
+                        "channelId": "4ec20e1b90005754930649",
+                        "fieldId_4ec20e5963750377023276": "4ec20e5963750377023276",
+                        "fieldValue_4ec20e5963750377023276": "1099",
+                        "fieldId_4ec20e4de2876883038462": "4ec20e4de2876883038462",
+                        "fieldValue_4ec20e4de2876883038462": "",
+                        "start": "",
+                        "end": "",
+                        "_": str(int (time.time() )*1000) 
                       }
     
     order_dict = {
@@ -130,69 +163,118 @@ class APITool(QObject):
         print("Step complete!")
         print("")
             
+
     
     @classmethod
-    def query_ticket(cls):  
-        print("Step: query_ticket (actually set tk in cookies...)")
+    def query_product(cls):  
+        print("Step: query_product...")
         
-        for key,value in APITool.cookies_info_dict.items():
-            cls.session.cookies.set(key, value, domain="m.quyundong.com")
-        print("cookies: ",cls.session.cookies)
+        for product_id in APITool.product_list:
+            APITool.query_product_dict["fieldValue_4ec20e5963750377023276"] = str(product_id)
         
-        whole_query_ticket_url = URL.query_ticket_url + parse.urlencode( APITool.badminton_info_dict )
-        print("query_url: ",whole_query_ticket_url)
-        response = cls.session.get( whole_query_ticket_url )
-        
-        soup = BeautifulSoup(response.content, 'html.parser')
-        li_list = soup.find_all("li")
-        for item in li_list:
-            #print(str(item))
-            #print("")
-            if "available" in str(item) and "7:00-8:00" in str(item):
-                
-                str_item = str(item)
-                #print(str_item)
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                course_content = soup2.li["course_content"].split(",")
-                APITool.order_dict["course_name[]"] = course_content[0]
-                APITool.order_dict["hour[]"] = course_content[1]
-                APITool.order_dict["price[]"] = course_content[2]
-                APITool.order_dict["real_time[]"] = course_content[3]
-                
-                APITool.order_dict["goods_ids"] = soup2.li["goodsid"]
-                APITool.doconfirm_dict["goods_ids"] = soup2.li["goodsid"]
-                #print(APITool.order_dict)
-                break
-        
-        input_list = soup.find_all("input")
-        for item in input_list:
-            str_item = str(item)
-            if "book_date" in str_item:
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                APITool.order_dict["book_date"] = soup2.input["value"]
-            if "allcourse_name" in str_item:
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                APITool.order_dict["allcourse_name"] = soup2.input["value"]
-            if "court_name" in str_item:
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                APITool.order_dict["court_name"] = soup2.input["value"]
-            if "category_name" in str_item:
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                APITool.order_dict["category_name"] = soup2.input["value"]
-            if "bid" in str_item:
-                soup2 = BeautifulSoup(str_item, 'html.parser')
-                APITool.order_dict["bid"] = soup2.input["value"]
-                APITool.doconfirm_dict["bid"] = soup2.input["value"]
-                
-        print("order_dict:")
-        for item in APITool.order_dict.items():
-            print(item.key,item.value)
-#    
+            print("query_product_dict: " +  str(product_id) + "...")
+            #for key,value in APITool.query_product_dict.items():
+            #   print(key,": ",value)
+            
+            whole_query_product_url = URL.query_product_url + parse.urlencode( APITool.query_product_dict )
+            print("query_product_url: ",whole_query_product_url)
+            response = cls.session.get( whole_query_product_url )
+            
+            #print(response.content)
+            html_text_lines = response.content.decode().split('\r\n')
+            for line in html_text_lines:
+                #print(line,len(line),type(line))
+                if "/kbs/lore/view/" in line:
+                    url = line[line.find("/kbs"):line.find(" target")-1]
+                    #print(line)
+                    print(url)
+                    APITool.product_url_dict[str(product_id)] = url
+                    
+            time.sleep(0.5)
+             
+                    
+        print("")
+        for key,value in APITool.product_url_dict.items():
+            print(key,": ",value)
         
         print("Step complete!")
         print("")
+    
+    
+    
+    @classmethod
+    def download_product_page(cls):  
+        print("Step: download_product_page...")
         
+        for key,value in APITool.product_url_dict.items():
+            #print(key,": ",value)
+            product_id_str = str(key)
+            download_url = URL.kbs_base_url + value
+            print(download_url)
         
+            response = cls.session.get( download_url )
+            
+            if not os.path.exists(product_id_str):
+                os.makedirs(product_id_str)
+            
+            file_name = product_id_str+ "\\" + product_id_str + ".html"
+            with open( file_name,"wb") as f:
+                f.write(response.content)
+            
+            APITool.download_product_content_page(product_id_str,response.content)
+            
+            
+            soup = BeautifulSoup(response.content,"html.parser")
+            tables = soup.findAll('table')
+            tab = tables[0]
+            for tr in tab.findAll("tr"):
+                for td in tr.findAll("td"):
+                    print(td.getText())
+
+            
+            time.sleep(5)
+        
+        print("Step complete!")
+        print("")
+    
+    @classmethod
+    def download_product_content_page(cls,product_id_str,content):  
+        html_text_lines = content.decode().split('\r\n')
+        for line in html_text_lines:
+            #print(line,len(line),type(line))
+            if "/kbs/lore/view/content/" in line:
+                url = line[line.find("/kbs"):len(line)-1]
+                #print(line)
+                #print(url)
+                download_url = URL.kbs_base_url + url
+                print(download_url)
+            
+                response = cls.session.get( download_url )
+                
+                if not os.path.exists(product_id_str):
+                    os.makedirs(product_id_str)
+                
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                script_list = soup.find_all("script")
+                for item in script_list:
+                    item.extract()
+                
+#                 third_producer = soup.find_all("script")[2]
+#                 print(third_producer)
+#                 
+#                 third_producer_removed=third_producer.extract()  
+#                 print(third_producer_removed)
+#                 pause()
+                soup.prettify()
+                
+                file_name = product_id_str+ "\\" + product_id_str + "_content.html"
+                with open( file_name,'a',encoding='utf-8') as f:
+                    for line in soup.contents:
+                        f.write( line.find() )
+
+    
+    
     @classmethod
     def confirm_order(cls):  
         print("Step: confirm_order ")
@@ -237,4 +319,6 @@ class APITool(QObject):
 if __name__ == '__main__':
 
     APITool.login_kbs()
+    APITool.query_product()
+    APITool.download_product_page()
 
