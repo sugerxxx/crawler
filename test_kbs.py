@@ -32,7 +32,7 @@ class APITool(QObject):
     def login_kbs(cls):
         data_dict = {'loginName': 'qianxt0929',
                         'postfix': '@tpl.cntaiping.com',
-                        'password': 'VHAxMjM0NTY='}
+                        'password': 'I5Qvm2wkzUPSmFr9WPBwGQ==aaaaa'}
         
         response = cls.session.post(URL.login_url,data_dict)
 
@@ -108,4 +108,5 @@ if __name__ == '__main__':
 
     APITool.login_kbs()
     print("aaa")
-    APITool.full_text_search()
+    APITool.address_list()
+    #APITool.full_text_search()
