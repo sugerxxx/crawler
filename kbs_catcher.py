@@ -22,9 +22,17 @@ class URL(object):
 #     postfix: @tpl.cntaiping.com
 #     password: VHAxMjM0NTY=
 #      Tp123456
+
+    login_dict = {'loginName': 'qianxt0929',
+                        'postfix': '@tpl.cntaiping.com',
+                        'password': "I5Qvm2wkzUPSmFr9WPBwGQ=="  }
     login_url = "http://10.21.0.2/kbs/login"
     
     
+    cc_main_url = "http://10.21.0.2/kbs/home/cc-main?type=home"
+    
+    study_url = ""
+    system_url = ""
     
     prelogin_url = "http://10.21.0.2/study/sso/preLogin?loginName=qianxt0929@tpl.cntaiping.com&SESSION_ID=##SESSION_ID##!##########&SESSION_LOGIN_MODE=LOGIN_MODE_LOCAL&t="
     
@@ -41,27 +49,79 @@ class URL(object):
 # start: 
 # end: 
 # _: 1571982800783
+    query_product_dict = {
+                        "categoryId": "4ec1cea5761b3066674699",
+                        "listStyle": "1",
+                        "order": "",
+                        "sort": "",
+                        "channelId": "4ec20e1b90005754930649",
+                        "fieldId_4ec20e5963750377023276": "4ec20e5963750377023276",
+                        "fieldValue_4ec20e5963750377023276": "1099",
+                        "fieldId_4ec20e4de2876883038462": "4ec20e4de2876883038462",
+                        "fieldValue_4ec20e4de2876883038462": "",
+                        "start": "",
+                        "end": "",
+                        "_": str(int (time.time() )*1000) 
+                      }
     query_product_url = "http://10.21.0.2/kbs/retrieve/ajax-list?"
     
     
     kbs_base_url = "http://10.21.0.2"
     
-
+class ParseTool(object):
+    @classmethod
+    def find_url_from_response(cls,content,str):
+        url = ""
+        html_text_lines = content.decode().split('\r\n')
+        for line in html_text_lines:
+            #print(line,len(line),type(line))
+            if str in line:
+                str_beg_pos = line.find(str)
+                str_end_pos = line[str_beg_pos:].find("\"")
+                #print(line[str_beg_pos:],str_beg_pos,str_beg_pos + str_end_pos)
+                url = line[str_beg_pos:str_beg_pos + str_end_pos]
+                #url = line[line.find("/kbs"):line.find(" target")-1]
+        return url    
+            
+    @classmethod           
+    def find_url_from_response2(cls,content,str):    
+        soup = BeautifulSoup(content,"lxml")
+        a_list = soup.find_all ("a")
+        for a in a_list:
+            if str in a["href"]:
+                return a["href"]
+        
+        return ""
+        
     
+    @classmethod
+    def downloading_file(cls,session,url_path,file_name):
+        
+        print("downloading..."  , url_path ,"to", file_name)
+        
+        #response= cls.session.get("http://10.21.0.2/kbs/upload/down-cdn/78eb2bba-71f2-4194-b71e-bf3b2cf6a284/0?dn=0")
+        file_response = session.get(url_path )
+        #print(file_response.headers)
+        #print(response.content)
+        f = open(file_name, "wb")
+        f.write(file_response.content)
+        f.close()
+        return
+    
+    @classmethod
+    def save_soup(cls,soup,file_name):
+        print("Saving "+ file_name)
+        content_file = open(file_name,'a',encoding='utf-8')
+        print(soup.prettify(), file = content_file)
+        content_file.close() 
 
 class APITool(QObject):
     session = requests.session()
     
-    cookies_info_dict = { 
-                        "AlteonP":"AFKfEAIAFQoAlhMpAAwSRg$$",
-                        "kmpro_tp_v5":"L54QT_OXu-LGTv2d9p6fRWsiy43BSJkqo2E8F9KIERcPu6MwFZpE!1293138469"#,
-                        #"JSESSIONID":"9pURVcGFwRGyE2SBtrlSd6id1aA2DwdMG5Auf9DuZV2RbQOYh-xr!1293138469"
-        
-                         }
     
-    product_list = [4041]
+    #product_list = [4041]
     #product_list = [1099,4041]
-    '''
+
     product_list = [1018,
 1099,
 1100,
@@ -142,132 +202,66 @@ class APITool(QObject):
 4067,
 4068,
 4074]
-    '''
+
     product_url_dict = {}
     
-    query_product_dict = {
-                        "categoryId": "4ec1cea5761b3066674699",
-                        "listStyle": "1",
-                        "order": "",
-                        "sort": "",
-                        "channelId": "4ec20e1b90005754930649",
-                        "fieldId_4ec20e5963750377023276": "4ec20e5963750377023276",
-                        "fieldValue_4ec20e5963750377023276": "1099",
-                        "fieldId_4ec20e4de2876883038462": "4ec20e4de2876883038462",
-                        "fieldValue_4ec20e4de2876883038462": "",
-                        "start": "",
-                        "end": "",
-                        "_": str(int (time.time() )*1000) 
-                      }
-    
-   
+    base_path = "kbs\\"
+  
     
     @classmethod
     def login_kbs(cls):
         print("Step: Login...")
-        
-        data_dict = {'loginName': 'qianxt0929',
-                        'postfix': '@tpl.cntaiping.com',
-                        'password': "I5Qvm2wkzUPSmFr9WPBwGQ=="  }
-        
-        #print("Cookies: ", cls.session.cookies)
 
+        response = cls.session.post(URL.login_url,URL.login_dict)
         
-        '''
-        headers = {
-            "Host": "10.21.0.2",
-            "Origin": "http://10.21.0.2",
-            "Referer": "http://10.21.0.2/kbs/login",
-            "Upgrade-Insecure-Requests": "1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
-            }
-         '''
-        
-        #response = cls.session.post(URL.login_url,data_dict,headers=headers)
-        response = cls.session.post(URL.login_url,data_dict)
-        
-        '''
         print("Cookies: ", cls.session.cookies)
-        print("kmpro_tp_v5: ", cls.session.cookies.get("kmpro_tp_v5"))
-        kmpro_tp_v5_url = "http://10.21.0.2/kbs/;kmpro_tp_v5=" + cls.session.cookies.get("kmpro_tp_v5")
-        print("kmpro_tp_v5_url",kmpro_tp_v5_url)
-        response = cls.session.get(kmpro_tp_v5_url)
-        '''
 
+        response = cls.session.get(URL.cc_main_url)
         
-        #for key,value in APITool.cookies_info_dict.items():
-        #   cls.session.cookies.set(key, value, domain="10.21.0.2")
-        print("Cookies: ", cls.session.cookies)
-        print("")
-        
-        
-        response = cls.session.get("http://10.21.0.2/kbs/home")
-        #print(response.content)
-        
-        response = cls.session.get("http://10.21.0.2/kbs/home/cc")
-        #print(response.content)
-        response = cls.session.get("http://10.21.0.2/kbs/home/cc-main?type=home")
-        
-        soup = BeautifulSoup(response.content,"html.parser")
+        soup = BeautifulSoup(response.content,"lxml")
         iframe_list = soup.find_all("iframe")
-        study_url = iframe_list[0]["src"]
-        system_url = iframe_list[1]["src"]
+        URL.study_url = URL.kbs_base_url + iframe_list[0]["src"]
+        URL.system_url =URL.kbs_base_url +  iframe_list[1]["src"]
         
-        
-            
+        print("study_url", URL.study_url)
+        response = cls.session.get(URL.study_url)
         #print(response.content.decode())
-        
-        
-        
-#         headers={
-#                             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-#                             "Accept-Encoding": "gzip, deflate",
-#                             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-#                             "Connection": "keep-alive",
-#                             #"Cookie":APITool.cookies_info_dict,
-#                             "Host": "10.21.0.2",
-#                             "Referer":"http://10.21.0.2/kbs/home/cc-main?type=home",
-#                             "Upgrade-Insecure-Requests": "1",
-#                             "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
-#                         }
-        
-        #URL.prelogin_url = URL.prelogin_url.replace("##SESSION_ID##",  str(cls.session.cookies.get("SESSION_ID")) )
-        
-        
-        #URL.prelogin_url = URL.prelogin_url.replace("##########",  str(int(time.time()) *1000) )
-        #print("prelogin_url", URL.prelogin_url)
-        print("study_url", URL.kbs_base_url + study_url)
-        response = cls.session.get(URL.kbs_base_url + study_url )
-        print(response.content.decode())
-        
-        print("system_url", URL.kbs_base_url + system_url)
-        response = cls.session.get(URL.kbs_base_url + system_url)
-        print(response.content.decode())
-        
-        
+        soup_study = BeautifulSoup(response.content,"lxml")
+        print(str(soup_study.body.string).strip())
+
+        print("system_url", URL.system_url )
+        response = cls.session.get( URL.system_url )
+        #print(response.content.decode())
+        soup_system = BeautifulSoup(response.content,"lxml")
+        print(str(soup_system.body.string).strip())
+
         print("Cookies: ", cls.session.cookies)
         
-        print("Step complete!")
+        print("Logging Step complete!")
         print("")
-
+        
 
     
     @classmethod
     def query_product(cls):  
         print("Step: query_product...")
         
-        for product_id in APITool.product_list:
-            APITool.query_product_dict["fieldValue_4ec20e5963750377023276"] = str(product_id)
         
-            print("query_product_dict: " +  str(product_id) + "...")
+        for product_id in APITool.product_list:
+            URL.query_product_dict["fieldValue_4ec20e5963750377023276"] = str(product_id)
+        
+            print("Product: " +  str(product_id) + "begins...")
             #for key,value in APITool.query_product_dict.items():
             #   print(key,": ",value)
             
-            whole_query_product_url = URL.query_product_url + parse.urlencode( APITool.query_product_dict )
+            whole_query_product_url = URL.query_product_url + parse.urlencode( URL.query_product_dict )
             print("query_product_url: ",whole_query_product_url)
             response = cls.session.get( whole_query_product_url )
             
             #print(response.content)
+            #print(ParseTool.find_url_from_response(response.content,"/kbs/lore/view/"))
+            #print(ParseTool.find_url_from_response2(response.content,"/kbs/lore/view/"))
+            '''
             html_text_lines = response.content.decode().split('\r\n')
             for line in html_text_lines:
                 #print(line,len(line),type(line))
@@ -275,16 +269,17 @@ class APITool(QObject):
                     url = line[line.find("/kbs"):line.find(" target")-1]
                     #print(line)
                     print(url)
-                    APITool.product_url_dict[str(product_id)] = url
+             '''       
+            product_url = ParseTool.find_url_from_response(response.content,"/kbs/lore/view/")
+            if product_url != "":
+                APITool.product_url_dict[str(product_id)] = ParseTool.find_url_from_response2(response.content,"/kbs/lore/view/")
                     
-            #time.sleep(0.5)
-             
-                    
-        print("")
+            time.sleep(random.random())
+
         for key,value in APITool.product_url_dict.items():
             print(key,": ",value)
         
-        print("Step complete!")
+        print("Product Querying Step complete!")
         print("")
     
     
@@ -293,20 +288,24 @@ class APITool(QObject):
     def download_product_page(cls):  
         print("Step: download_product_page...")
         
+        i = 1
         for key,value in APITool.product_url_dict.items():
             print(key,": ",value)
             product_id_str = str(key)
             download_url = URL.kbs_base_url + value
-            print(download_url)
+            print("download_url",download_url)
         
+            
+            
+            if  os.path.exists(APITool.base_path + product_id_str):
+                shutil.rmtree(APITool.base_path + product_id_str)
+            os.makedirs(APITool.base_path + product_id_str)
+            
             response = cls.session.get( download_url )
-            
-            if  os.path.exists(product_id_str):
-                shutil.rmtree(product_id_str)
-            os.makedirs(product_id_str)
-            
             soup = BeautifulSoup(response.content,"html.parser")
             
+            
+            #去除正文
             iframe_list = soup.find_all("iframe")
             for item in iframe_list:
                 item.extract()
@@ -328,63 +327,22 @@ class APITool(QObject):
                     file_name = repr(string_text).strip("'")
                     break
                 #file_name = "太平真爱定期寿险2018产品培训课件.pdf"
-                print(file_name)
+                #print(file_name)
                 for link in item.find_all("a"):
                     #print(link["href"])
                     if "/kbs/upload/down-cdn" in link["href"] :
                         link_href = link["href"]
-                        #link_href = link_href.replace("down-cdn","down-local")
-                        #link_href = link_href[0:link_href.rfind("/")]
-                        
-#                         headers={
-#                             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-#                             "Accept-Encoding": "gzip, deflate",
-#                             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-#                             "Connection": "keep-alive",
-#                             "Host": "10.21.0.2",
-#                             "Referer":download_url,
-#                             "Upgrade-Insecure-Requests": "1",
-#                             "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
-#                         }
-#                         for key,value in headers.items():
-#                             print( key,value)
-                        #print(headers)
-                        
-                        print("downloading..." , URL.kbs_base_url + link_href ,product_id_str + "/" + file_name)
+                        whole_file_name = APITool.base_path +product_id_str + "/" + file_name
+                        ParseTool.downloading_file(cls.session,URL.kbs_base_url + link_href,whole_file_name)
                         
 
-                        
-                        #response= cls.session.get("http://10.21.0.2/kbs/upload/down-cdn/78eb2bba-71f2-4194-b71e-bf3b2cf6a284/0?dn=0")
-                        file_response = cls.session.get(URL.kbs_base_url + link_href )
-                        #print(file_response.headers)
-                        #print(response.content)
-                        f = open(product_id_str + "/" + file_name, "wb")
-                        f.write(file_response.content)
-                        f.close()
-                        
-
-
-
-            
-            div_content = APITool.download_product_content_page(product_id_str,response.content)
+            div_content = APITool.download_product_content_page(APITool.base_path +product_id_str,response.content)
             #print("div_content",div_content)
-            print("")
-            
+            #print("")
             soup.find(id="zw").append(div_content)
             
-            
-
-                         
-                
-            file_name = product_id_str+ "\\" + product_id_str + ".html"
-#             with open( file_name,"wb") as f:
-#                 f.write(response.content)
-            
-            content_file = open(file_name,'a',encoding='utf-8')
-            print(soup.prettify(), file = content_file)
-            content_file.close() 
-            
-
+            file_name = APITool.base_path +product_id_str+ "\\" + product_id_str + ".html"
+            ParseTool.save_soup(soup,file_name)
 #             
 #             tables = soup.findAll('table')
 #             tab = tables[0]
@@ -393,16 +351,19 @@ class APITool(QObject):
 #                     print(td.getText())
 
             
+            if i < len(APITool.product_list):
+                i = i + 1
+                sleeptime=20+int(random.random()*20)
+                print("sleeptime:" ,sleeptime)
+                time.sleep(sleeptime)
+                
+            print("")
             
-            sleeptime=20+int(random.random()*20)
-            print("sleeptime:" ,sleeptime)
-            time.sleep(sleeptime)
-        
-        print("Step complete!")
+        print("Downloading Product Step complete!")
         print("")
     
     @classmethod
-    def download_product_content_page(cls,product_id_str,content):  
+    def download_product_content_page(cls,path,content):  
         html_text_lines = content.decode().split('\r\n')
         for line in html_text_lines:
             #print(line,len(line),type(line))
@@ -410,48 +371,31 @@ class APITool(QObject):
                 url = line[line.find("/kbs"):len(line)-1]
                 #print(line)
                 #print(url)
-                download_url = URL.kbs_base_url + url
-                print(download_url)
+                product_content_url = URL.kbs_base_url + url
+                print("product_content_url",product_content_url)
             
-                response = cls.session.get( download_url )
+                response = cls.session.get( product_content_url )
                 
-                #if not os.path.exists(product_id_str):
-                #   os.makedirs(product_id_str)
                 
                 soup = BeautifulSoup(response.content, 'html.parser')
                 
                 img_list = soup.find_all("img")
                 for img in img_list:
-                    #print(img)
-                    print("downloading...",URL.kbs_base_url + img["src"])
-                    #print(str(img["src"]).rfind("/"),len(str(img["src"]))-1)
+
                     picture_name =  str(img["src"])[str(img["src"]).rfind("/")+1:len(str(img["src"]))]
-                    print(picture_name)
-                    #request.urlretrieve(URL.kbs_base_url + img["src"],  product_id_str + "/" + picture_name)
-                    
-                    file_response = cls.session.get(URL.kbs_base_url + img["src"])
-                        #print(file_response.headers)
-                        #print(response.content)
-                    f = open(product_id_str + "/" + picture_name, "wb")
-                    f.write(file_response.content)
-                    f.close()
-                    
+                    #print(picture_name)
+
+                    ParseTool.downloading_file(cls.session,URL.kbs_base_url + img["src"] ,path + "/" + picture_name)
+
                     img["src"] = picture_name
-                    #print(img)
-                    #print(img["src"])
-                
+
                 script_list = soup.find_all("script")
                 for item in script_list:
                     item.extract()
-                
 
                 
-#                 file_name = product_id_str+ "\\" + product_id_str + "_content.html"
-#                 content_file = open(file_name,'a',encoding='utf-8')
-#                 print(soup.prettify(), file = content_file)
-#                 content_file.close() 
-
                 div_content = soup.find(id = "content")
+            
                 return div_content
 
 if __name__ == '__main__':
