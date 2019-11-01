@@ -25,7 +25,7 @@ class URL(object):
 
     login_dict = {'loginName': 'qianxt0929',
                         'postfix': '@tpl.cntaiping.com',
-                        'password': "I5Qvm2wkzUPSmFr9WPBwGQ=="  }
+                        'password': "I5Qvm2wkzUPSmFr9WPBwGQ=="}
     login_url = "http://10.21.0.2/kbs/login"
     
     
