@@ -61,10 +61,14 @@ class URL(object):
 class APITool(QObject):
     session = requests.session()
     
+    serverid = "ea16ff80abbcfc187fe38174255bf06e|1573699730|1573699646"
+    date_str = '2019-11-20'
+    hr = 11
+    
     cookies_info_dict = { 
-                         "SERVERID":"72b4f471436da038ecf60341309b88c2|1571985575|1571913487",
+                         "SERVERID":  serverid,   #need to be changed
                          "PHPSESSID":"joc48cr8kopr08p2cgdqujegt3",
-                         "wx_hash" : "234dc9f18382888227ec23f901864770",
+                         #"wx_hash" : "234dc9f18382888227ec23f901864770",
                          "wx_nick_name" : "428819",
                          "wx_phone" :  "13764288196",
                          "wx_uid" : "Itnft4H4bj4Xye8bhSjI",
@@ -73,13 +77,13 @@ class APITool(QObject):
     
     badminton_info_dict = {
                         "bid":22377,
-                        "t":  int (time.mktime( time.strptime('2019-10-29','%Y-%m-%d') )  ),
+                        "t":  int (time.mktime( time.strptime( date_str,'%Y-%m-%d') )  ),
                         "cid":1
                       }
     
     order_dict = {
                 "price[]":0,
-                "hour[]":0,
+                "hour[]": hr,
                 "course_name[]":"",
                 "real_time[]":"",
                 "allcourse_name":"A号场,B号场,C号场,D号场",
@@ -132,7 +136,9 @@ class APITool(QObject):
         for item in li_list:
             #print(str(item))
             #print("")
-            if "available" in str(item) and "7:00-8:00" in str(item):
+            hr = str(APITool.order_dict["hour[]"] )
+            hr_str = hr + ":00-" + str(int(hr)+1) + ":00"
+            if "available" in str(item) and hr_str in str(item):
                 
                 str_item = str(item)
                 #print(str_item)
@@ -219,7 +225,8 @@ class APITool(QObject):
 
 
 if __name__ == '__main__':
-
+    print(time.time())
     APITool.query_ticket()
     APITool.confirm_order()    
     APITool.doorder()
+    print(time.time())
