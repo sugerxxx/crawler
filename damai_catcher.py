@@ -18,14 +18,35 @@ import shutil
 import os
 import random
 import json
+from fake_useragent import UserAgent
 
 class Order_Param(object):
     itemId = 607400046123
     price = 298
     skuId = 0
+    umidToken = ""
     
 
 class URL(object):
+    
+    passport_url = "https://passport.damai.cn/login?ru=https%3A%2F%2Fwww.damai.cn%2F"
+    
+    ipassport_url = "https://ipassport.damai.cn/mini_login.htm?"
+    
+    ipassport_dict = {
+            "lang": "zh_cn",
+            "appName": "damai",
+            "appEntrance": "default",
+            "styleType": "vertical",
+            "bizParams": "",
+            "notLoadSsoView": "true",
+            "notKeepLogin": "false",
+            "isMobile": "false",
+            "showSnsLogin": "false",
+            "regUrl": "//passport.damai.cn/register",
+            "plainReturnUrl":"//passport.damai.cn/login",
+            "returnUrl": "https://passport.damai.cn/dologin.htm?redirectUrl=https%253A%252F%252Fwww.damai.cn%252F&platform=106002",
+            "rnd": random.random() }
     
     query_product_dict = {
         "id" :  Order_Param.itemId
@@ -102,8 +123,9 @@ class ParseTool(object):
         content_file.close() 
 
 class APITool(QObject):
-    session = requests.session()
-    
+    session = requests.session()    
+    ua = UserAgent(use_cache_server=False)
+
     
     cookies_info_dict = { 
                          "damai.cn_nickName":  "%E9%BA%A6%E5%AD%9008XYa",   
@@ -126,6 +148,12 @@ class APITool(QObject):
                          "isg": "BHV1I4dhRPoxu6Ay214QosXLhPEllqgrBY0FEveaM-w7zpXAv0aE1atMGNLdikG8",
                          "c_csrf" : "f9fbbc1b-cb5c-4f79-bff4-c126c824659a"
                          }
+    
+    cookies_info_dict2 = { 
+                         "l": "dBQhfqvgqlmFWE6SXOCanurza77OSIRYmuPzaNbMi_5BH6L_Ua7OkBWLcFp6VjWfMH8B41jxjkw9-etki7h8Swq7dDZabxDc.",
+                         "isg": "BHV1I4dhRPoxu6Ay214QosXLhPEllqgrBY0FEveaM-w7zpXAv0aE1atMGNLdikG8",
+                         }
+    
     buy_cookies_info_dict = {
                         "c_csrf" : "f9fbbc1b-cb5c-4f79-bff4-c126c824659a"
                         }
@@ -141,6 +169,25 @@ class APITool(QObject):
         print("Logging Step complete!")
         print("")
         
+    @classmethod
+    def login2_damai(cls):
+        print("Step: Login...")
+        
+        #user_agent = {"User-agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"}
+        user_agent = {"User-agent":cls.ua.chrome}
+        print(user_agent)
+        
+        for key,value in APITool.cookies_info_dict2.items():
+            cls.session.cookies.set(key, value, domain=".damai.cn")
+        response = cls.session.get(URL.passport_url,headers = user_agent)    
+        whole_ipassport_url = URL.ipassport_url + parse.urlencode( URL.ipassport_dict )
+        print(whole_ipassport_url)
+        response = cls.session.get(whole_ipassport_url)      
+            
+        print("cookies: ",cls.session.cookies)
+
+        print("Logging Step complete!")
+        print("")
 
     
     @classmethod
@@ -180,7 +227,7 @@ class APITool(QObject):
         
         umidToken = response.json()
         print(umidToken["tn"])
-        URL.order_confirm_dict["exParams"]["umidToken"] = umidToken["tn"]
+        Order_Param.umidToken = umidToken["tn"]
         print("Get Umjson complete!")
         print("")
         
@@ -208,11 +255,11 @@ class APITool(QObject):
 if __name__ == '__main__':
     
     time1 = time.time()
-    
-    APITool.login_damai()
-    APITool.query_product()
-    APITool.get_umjson()
-    APITool.order_confirm_page()
+    print(random.random())
+    APITool.login2_damai()
+    #APITool.query_product()
+    #APITool.get_umjson()
+    #APITool.order_confirm_page()
     
     time2 = time.time()
     print("Spent:",time2-time1," sec.")
