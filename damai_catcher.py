@@ -125,6 +125,11 @@ class ParseTool(object):
 class APITool(QObject):
     session = requests.session()    
     ua = UserAgent(use_cache_server=False)
+    csrf_token = ""
+    hsiz = ""
+    umidToken = ""
+    umidEncryptAppName = ""
+    window_token = ""
 
     
     cookies_info_dict = { 
@@ -171,19 +176,47 @@ class APITool(QObject):
         
     @classmethod
     def login2_damai(cls):
+        
+
+        
         print("Step: Login...")
         
         #user_agent = {"User-agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"}
         user_agent = {"User-agent":cls.ua.chrome}
-        print(user_agent)
+        #print(user_agent)
         
         for key,value in APITool.cookies_info_dict2.items():
             cls.session.cookies.set(key, value, domain=".damai.cn")
         response = cls.session.get(URL.passport_url,headers = user_agent)    
         whole_ipassport_url = URL.ipassport_url + parse.urlencode( URL.ipassport_dict )
         print(whole_ipassport_url)
-        response = cls.session.get(whole_ipassport_url)      
-            
+        response = cls.session.get(whole_ipassport_url)     
+         
+        soup = BeautifulSoup(response.content,"lxml")
+        script_list = soup.find_all( "script")
+        
+        print(str(script_list[1].string))
+        window_list = str(script_list[1].string).split("\n")
+        for window in window_list:
+            if "window.viewData" in window:
+                print(window)
+                viewData_dict = json.loads(window[window.find("{"):len(window)-1])
+                cls.csrf_token = viewData_dict["loginFormData"]["csrf_token"]
+                cls.hsiz =  viewData_dict["loginFormData"]["hsiz"]
+                cls.umidToken = viewData_dict["umidToken"]
+                cls.umidEncryptAppName = viewData_dict["umidEncryptAppName"]
+  
+        #print(str(script_list[3].string))
+        window_list = str(script_list[3].string).split("\n")        
+        for window in window_list:
+            if "token" in window:
+                print(window)
+                cls.window_token = window[window.find('"')+1:len(window)-2]
+                print(cls.window_token)
+                
+        
+        
+        
         print("cookies: ",cls.session.cookies)
 
         print("Logging Step complete!")
