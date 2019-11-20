@@ -19,12 +19,22 @@ import os
 import random
 import json
 from fake_useragent import UserAgent
+import hashlib
 
 class Order_Param(object):
+    ua = UserAgent(use_cache_server=False)
+    ua_chrome=ua.chrome
+    ua_chrome = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"  #seems related with ua
     itemId = 607400046123
     price = 298
     skuId = 0
+    csrf_token = ""
+    hsiz = ""
     umidToken = ""
+    umidEncryptAppName = ""
+    #window_token = ""
+    umjson_tn_tn = ""
+    umjson_tn_id = ""
     
 
 class URL(object):
@@ -48,6 +58,32 @@ class URL(object):
             "returnUrl": "https://passport.damai.cn/dologin.htm?redirectUrl=https%253A%252F%252Fwww.damai.cn%252F&platform=106002",
             "rnd": random.random() }
     
+    eg_js_url = "https://log.mmstat.com/eg.js"
+    
+    check_url = "https://ipassport.damai.cn/newlogin/account/check.do?appName=damai&fromSite=-2"
+    
+    check_dict = {
+                "oginId": "13764288196",
+                "ua": "121#pSmlkthHVqllVl2OG8Hel1ZU3aXWxOwYlGr6qsG21l5EKPFupUI7VmwmCaFdK5jVllKY+zPIDMlSAQQcVFT3ll9YAcWZKujVVy5H4FJ5KM9lOlrJEGiIlMLYAcfdK5jVlmuY+zpIxM9VO3rnEkDIll9YOc8dKkjVlwr7jPXUqMoVG0bvsbc9M98ze0bWkBu9CbibYQhEU960C6Jbnj2SRCD0CZe483VhlRjGprzXF9WbMXF3nnxVpb6FlwRT8uzDCbi0CN+SFtFbbZsbnjxSpXb0C60Z8uBmbZs0CeHXF960C60lnFOmcyYaG3an8up0MsUoFNMGKynVdf+wJoLVTMSbkX7T83pWVwmG58VRDqjTtId3R68hM5dj4U/bQztr7fMDfYTGYGgGr4BBiAYNEXQhGET0EwS77S3GFc55gmSpUBCfM2mNHiN9DFe6Yr+KhMujD+V8W4XJfyQ3rNxPJWLmsO11RCJvrOaTAzUOr+Dt0FJrjDLio48zzdixHJ/b9Edf6jTXP0EcmIDXBiFlRhMvBsfnVNCMOq13LjFI5ZB+nryc5/8a0QnB8N/QUGK2DCEoP9SUp3O3pkmDjDxQn2NQNhUUuKNwjakORynDO4ruAaiNkhSMR7jO5NkM/TxwFsol5TMhpENFe50A16GlRJoU2nwzE2AVxHYFno//d6P7CDjCqTpRnq0ae35hPOkxbxRBrMGIQlijs8fB746e7EpYRDL4Kov04P9EqtjRhCeAKKuqecAPL8nls8eErhBZTYcb2mGs6Nv/9ebKJqAfw7tMB+Y0DObfa31jt/cbj9RD2WmsnYEqfNxkPPJyMcVe1WjkF/rEfsKMWuiYO5U9N4ixBWF3CXFU/aDFLU0jl1SD6M3vplQnyRaaUY6auualPwKls6tHIP641p/2CZF5Vk9GrkpaDsVNDQoA4v9jLNaU/f2PhvRdwxSd33prAJ2Onl/6a/ly1GIz4MncmR0FQfIKWWg6XixIPykPiFbRaZ1zUwXXeqcQbNHqf5lnc9khJVd6zoKBwEU6KZPX5n1XgjppUeTgH6C9mbxUleQSVjqjnrwRrLQlXr+rfy9x4B/EadxUXu+L5LIgeKcaeoOy0UbIgDPFSqzZ+2P/Txciwa5seI4HpyVZ7RYLtx5C6PqKfn78aLii8Y2mEnYFZpHKJ1ELinqul7M8kCbuwsbNjF9lbOJ/MTYdZcKIVVbqSoYqfQiJpBR0uImFA6fcW4iN340TnZw3lj5G+4TqdGgYZvoaAjwSdvqw8cgGq3O/mPKu/aVshhvP+TbjKHo5b8v7S5D/n5fCewU/K53Ld8E8WKxi93Ihcu1FA6v0AFrocmiZYnwKg0SJMN32tXgUgsm=",
+                "umidGetStatusVal": "255",
+                "screenPixel": "1680x1050",
+                "navlanguage": "zh-CN",
+                #"navUserAgent": Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36
+                "navUserAgent": Order_Param.ua_chrome,
+                "navPlatform": "Win32",
+                "appEntrance": "damai",
+                "appName": "damai",
+                "bizParams": "",
+                "csrf_token": Order_Param.csrf_token,
+                "fromSite": "-2",
+                "hsiz": Order_Param.hsiz,
+                "isMobile": "false",
+                "lang": "zh_CN",
+                "mobile": "false",
+                "returnUrl": "https://passport.damai.cn/dologin.htm?redirectUrl=https%253A%252F%252Fwww.damai.cn%252F&platform=106002",
+                "umidToken": Order_Param.umidToken
+        }
+    
     query_product_dict = {
         "id" :  Order_Param.itemId
                     }
@@ -68,8 +104,8 @@ class URL(object):
     
     get_umjson_dict = {
         "data": "106!MUqmc0clzdnH+NixHmHI4lxmYX+lQzGzUUam0LHtKjRU56cm9rQby+bZ0PHCncyIKV4odp7HxfbvZ28EKYD9SajrmnXmkmNZlYu2E2nUH/7cDZUDbgGZ6752xZCB3P0GOcFM5rLosAHgFOB+bBLKcQ8Mwn5w790rxiSkMfdEOCh1URFsw78OGUBmnv7SP7EgXqE72E7w56UzU2G/um6XOCuczYCpPZEL1DaU6u3P/DumRB3rETvQ46gW16IHSdYU42kU6IcPsRaUxzEG/b2/hKH68klfkKu/6e95DBa3Q9EoJe/joDBHvId8LmGwiqr32msKPDDYYgoZcjt4MA7XbFWe4NoKXdKC6MN/cMuB4wPXzztFdhaPjp4NhNfZ0bMPoVejEQhDp/0oR8Vxd8wNBswF5mXOEe/oucdl0InOBB9YUUVEmlibaupTON7316xNTOm3kB9KQnY8NujBQJcK5i1Hq5W2OpcT3rMXeVVXdlCb9xrvn4jh2Mi96EtOdNMu7NAfIX7a4CzDFTf+111n7E+PQB/IElHCjC7EHG4k+aQE3N7+4NUc7r4zuSt1neCeHz8DIIpWXmxvLUYqjGbN3+SCfbEXxzL76Ab4eJyefPrRn9ngyYNbZ5X6uPJtVcALFULE8MhweCHzlH7S4SZAKI6o0ToPAL8R70TvzXonXgfF+XmKXrzjtNU8P847TWUvuDAs8HQcsDcLWZAN",
-        "xa": "mec-tradeportal",
-        "xt": ""
+        "xa": "havana-damai",
+        "xt": Order_Param.umidToken
         }
     
     get_umjson_url = "https://ynuf.aliapp.org/service/um.json"
@@ -124,12 +160,8 @@ class ParseTool(object):
 
 class APITool(QObject):
     session = requests.session()    
-    ua = UserAgent(use_cache_server=False)
-    csrf_token = ""
-    hsiz = ""
-    umidToken = ""
-    umidEncryptAppName = ""
-    window_token = ""
+    
+    
 
     
     cookies_info_dict = { 
@@ -182,7 +214,7 @@ class APITool(QObject):
         print("Step: Login...")
         
         #user_agent = {"User-agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"}
-        user_agent = {"User-agent":cls.ua.chrome}
+        user_agent = {"User-agent":Order_Param.ua_chrome}
         #print(user_agent)
         
         for key,value in APITool.cookies_info_dict2.items():
@@ -195,33 +227,54 @@ class APITool(QObject):
         soup = BeautifulSoup(response.content,"lxml")
         script_list = soup.find_all( "script")
         
-        print(str(script_list[1].string))
+        #print(str(script_list[1].string))
         window_list = str(script_list[1].string).split("\n")
         for window in window_list:
             if "window.viewData" in window:
-                print(window)
+                #print(window)
                 viewData_dict = json.loads(window[window.find("{"):len(window)-1])
-                cls.csrf_token = viewData_dict["loginFormData"]["csrf_token"]
-                cls.hsiz =  viewData_dict["loginFormData"]["hsiz"]
-                cls.umidToken = viewData_dict["umidToken"]
-                cls.umidEncryptAppName = viewData_dict["umidEncryptAppName"]
+                Order_Param.csrf_token = viewData_dict["loginFormData"]["csrf_token"]
+                Order_Param.hsiz =  viewData_dict["loginFormData"]["hsiz"]
+                Order_Param.umidToken = viewData_dict["umidToken"]
+                Order_Param.umidEncryptAppName = viewData_dict["umidEncryptAppName"]
+                #print(Order_Param.umidToken)
   
         #print(str(script_list[3].string))
+        '''
         window_list = str(script_list[3].string).split("\n")        
         for window in window_list:
             if "token" in window:
-                print(window)
-                cls.window_token = window[window.find('"')+1:len(window)-2]
-                print(cls.window_token)
-                
-        
-        
+                #print(window)
+                Order_Param.window_token = window[window.find('"')+1:len(window)-2]
+                print(Order_Param.window_token)
+         '''       
+        response = cls.session.get(URL.eg_js_url)
+        cna_string = response.content.decode()
+        #print(cna_string)
+        cna = cna_string[cna_string.find("goldlog.Etag")+14:cna_string.find(";goldlog.stag")-1]
+        print(cna)
+        cls.session.cookies.set("cna", cna, domain=".damai.cn")
         
         print("cookies: ",cls.session.cookies)
 
         print("Logging Step complete!")
         print("")
 
+    @classmethod
+    def check_name(cls):
+        print("Step: check_name...")        
+        
+        head = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", 'Connection': 'close'}
+
+        
+        response = requests.post(URL.check_url,data=URL.check_dict,headers=head)
+        
+        print(response.json())
+        
+        print("cookies: ",cls.session.cookies)
+
+        print("check_name Step complete!")
+        print("")
     
     @classmethod
     def query_product(cls):  
@@ -258,9 +311,13 @@ class APITool(QObject):
         response = cls.session.post(URL.get_umjson_url,URL.get_umjson_dict)
         print(response.content)
         
-        umidToken = response.json()
-        print(umidToken["tn"])
-        Order_Param.umidToken = umidToken["tn"]
+        umjson_tn = response.json()
+        #print(umjson_tn["tn"])
+        Order_Param.umjson_tn_tn = umjson_tn["tn"]
+        Order_Param.umjson_tn_id = umjson_tn["id"]
+        print(Order_Param.umjson_tn_tn)
+        print(Order_Param.umjson_tn_id )
+        
         print("Get Umjson complete!")
         print("")
         
@@ -288,10 +345,21 @@ class APITool(QObject):
 if __name__ == '__main__':
     
     time1 = time.time()
-    print(random.random())
+    
+    data = "Um111111"
+    sha256 = hashlib.sha512()
+    sha256.update(data.encode())
+    print(sha256)
+    res = sha256.hexdigest()
+    print("sha256加密结果:", res)
+    
+    pause()
+    
+    
     APITool.login2_damai()
+    APITool.get_umjson()
+    APITool.check_name()
     #APITool.query_product()
-    #APITool.get_umjson()
     #APITool.order_confirm_page()
     
     time2 = time.time()
