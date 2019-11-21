@@ -20,6 +20,8 @@ import random
 import json
 from fake_useragent import UserAgent
 import hashlib
+import execjs
+
 
 class Order_Param(object):
     ua = UserAgent(use_cache_server=False)
@@ -345,15 +347,87 @@ class APITool(QObject):
 if __name__ == '__main__':
     
     time1 = time.time()
+    password = "Um111111"
+    rsaExponent = "10001"
+    rsaModulus = "d3bcef1f00424f3261c89323fa8cdfa12bbac400d9fe8bb627e8d27a44bd5d59dce559135d678a8143beb5b8d7056c4e1f89c4e1f152470625b7b41944a97f02da6f605a49a93ec6eb9cbaf2e7ac2b26a354ce69eb265953d2c29e395d6d8c1cdb688978551aa0f7521f290035fad381178da0bea8f9e6adce39020f513133fb",
     
-    data = "Um111111"
-    sha256 = hashlib.sha512()
-    sha256.update(data.encode())
-    print(sha256)
-    res = sha256.hexdigest()
-    print("sha256加密结果:", res)
+   
     
-    pause()
+    js_str = '''function sum(i,j)
+    {
+    sum=i+j;return sum
+    }'''
+    js=execjs.compile(js_str)
+    result=js.call('sum',1,2)
+    print(result)
+    
+    
+    
+    js_str= '''function rsa(t,rsaModulus,rsaExponent) 
+            {
+                var e = new u.default;
+                return e.setPublic(rsaModulus, rsaExponent),
+                e.encrypt(t)
+            }
+            
+            setPublic = function(t, e) {
+        null != t && null != e && t.length > 0 && e.length > 0 ? (this.n = function(t, e) {
+            return new i(t,e)
+        }(t, 16),
+        this.e = parseInt(e, 16)) : alert("Invalid RSA public key")
+    }
+    
+    encrypt = function(t) {
+        var e = function(t, e) {
+            if (e < t.length + 11)
+                return alert("Message too long for RSA"),
+                null;
+            for (var n = new Array, o = t.length - 1; o >= 0 && e > 0; ) {
+                var r = t.charCodeAt(o--);
+                r < 128 ? n[--e] = r : r > 127 && r < 2048 ? (n[--e] = 63 & r | 128,
+                n[--e] = r >> 6 | 192) : (n[--e] = 63 & r | 128,
+                n[--e] = r >> 6 & 63 | 128,
+                n[--e] = r >> 12 | 224)
+            }
+            n[--e] = 0;
+            for (var a = new j, s = new Array; e > 2; ) {
+                for (s[0] = 0; 0 == s[0]; )
+                    a.nextBytes(s);
+                n[--e] = s[0]
+            }
+            return n[--e] = 2,
+            n[--e] = 0,
+            new i(n)
+        }(t, this.n.bitLength() + 7 >> 3);
+        if (null == e)
+            return null;
+        var n = this.doPublic(e);
+        if (null == n)
+            return null;
+        var o = n.toString(16);
+        return 0 == (1 & o.length) ? o : "0" + o
+    }
+    
+         '''
+    
+    
+    
+    
+
+    
+    
+    js=execjs.compile( js_str )
+    
+    result=js.call('rsa',password,rsaModulus,rsaExponent)
+    print(result)
+    
+    
+    
+    
+    
+    
+    
+
     
     
     APITool.login2_damai()
