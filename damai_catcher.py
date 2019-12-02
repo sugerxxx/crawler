@@ -20,7 +20,15 @@ import random
 import json
 from fake_useragent import UserAgent
 import hashlib
-import execjs
+#import execjs
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.serialization import NoEncryption,Encoding, PrivateFormat, PublicFormat
+
+#from crypto import PublicKey
+#from crypto.PublicKey import RSA
+#from crypto import Random
+
 
 
 class Order_Param(object):
@@ -348,83 +356,87 @@ if __name__ == '__main__':
     
     time1 = time.time()
     password = "Um111111"
-    rsaExponent = "10001"
-    rsaModulus = "d3bcef1f00424f3261c89323fa8cdfa12bbac400d9fe8bb627e8d27a44bd5d59dce559135d678a8143beb5b8d7056c4e1f89c4e1f152470625b7b41944a97f02da6f605a49a93ec6eb9cbaf2e7ac2b26a354ce69eb265953d2c29e395d6d8c1cdb688978551aa0f7521f290035fad381178da0bea8f9e6adce39020f513133fb",
+    #rsaExponent = "010001"
+    rsaExponent = '010001'
+    #rsaExponent = 65537
+    rsaModulus = 'd3bcef1f00424f3261c89323fa8cdfa12bbac400d9fe8bb627e8d27a44bd5d59dce559135d678a8143beb5b8d7056c4e1f89c4e1f152470625b7b41944a97f02da6f605a49a93ec6eb9cbaf2e7ac2b26a354ce69eb265953d2c29e395d6d8c1cdb688978551aa0f7521f290035fad381178da0bea8f9e6adce39020f513133fb'
     
-   
+    def generate_rsa_keys():
+        """crpyto install need gcc and python-devel
+        pip install pycrypto
+        """
+        random_generator = Random.new().read
+        key = RSA.generate(1024, random_generator)
+        pub_key = key.publickey()
+        print(pub_key)
     
-    js_str = '''function sum(i,j)
-    {
-    sum=i+j;return sum
-    }'''
-    js=execjs.compile(js_str)
-    result=js.call('sum',1,2)
-    print(result)
-    
-    
-    
-    js_str= '''function rsa(t,rsaModulus,rsaExponent) 
-            {
-                var e = new u.default;
-                return e.setPublic(rsaModulus, rsaExponent),
-                e.encrypt(t)
-            }
-            
-            setPublic = function(t, e) {
-        null != t && null != e && t.length > 0 && e.length > 0 ? (this.n = function(t, e) {
-            return new i(t,e)
-        }(t, 16),
-        this.e = parseInt(e, 16)) : alert("Invalid RSA public key")
-    }
-    
-    encrypt = function(t) {
-        var e = function(t, e) {
-            if (e < t.length + 11)
-                return alert("Message too long for RSA"),
-                null;
-            for (var n = new Array, o = t.length - 1; o >= 0 && e > 0; ) {
-                var r = t.charCodeAt(o--);
-                r < 128 ? n[--e] = r : r > 127 && r < 2048 ? (n[--e] = 63 & r | 128,
-                n[--e] = r >> 6 | 192) : (n[--e] = 63 & r | 128,
-                n[--e] = r >> 6 & 63 | 128,
-                n[--e] = r >> 12 | 224)
-            }
-            n[--e] = 0;
-            for (var a = new j, s = new Array; e > 2; ) {
-                for (s[0] = 0; 0 == s[0]; )
-                    a.nextBytes(s);
-                n[--e] = s[0]
-            }
-            return n[--e] = 2,
-            n[--e] = 0,
-            new i(n)
-        }(t, this.n.bitLength() + 7 >> 3);
-        if (null == e)
-            return null;
-        var n = this.doPublic(e);
-        if (null == n)
-            return null;
-        var o = n.toString(16);
-        return 0 == (1 & o.length) ? o : "0" + o
-    }
-    
-         '''
-    
-    
-    
-    
+        public_key = pub_key.exportKey("PEM")
+        private_key = key.exportKey("PEM")
+        return public_key, private_key
 
     
+    def generate_keys():
+        """
+        pip install cryptography
+        """
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            #key_size=1024,
+            #backend=default_backend(),
+            key_size=256,
+            backend=rsaModulus
+        )
+        
+        #print(default_backend().)
+        
+        serialized_private_key = private_key.private_bytes(
+            Encoding.PEM,
+            PrivateFormat.PKCS8,
+            NoEncryption()
+        )
+        
+        public_key = private_key.public_key()
+        print(public_key)
+        
+        serialized_public_key = public_key.public_bytes(
+            Encoding.PEM,
+            PublicFormat.SubjectPublicKeyInfo,
+        )
     
-    js=execjs.compile( js_str )
+        return serialized_public_key, serialized_private_key
     
-    result=js.call('rsa',password,rsaModulus,rsaExponent)
-    print(result)
+    def populate_public_key(rsaExponent, rsaModulus):
+        '''
+        根据cryptography包下的rsa模块，对指数模数进行处理生成公钥
+        :param rsaExponent:指数
+        :param rsaModulus:模数
+        :return:公钥
+        '''
+        rsaExponent = int(rsaExponent, 16)  # 十六进制转十进制
+        rsaModulus = int(rsaModulus, 16)
+    
+        pubkey = rsa.RSAPublicNumbers(rsaExponent, rsaModulus).public_key(default_backend())
+
+        return pubkey
+
+    
+    pubkey = populate_public_key(rsaExponent, rsaModulus)
+    print(pubkey)
+    #key = rsa.RSAPublicNumbers(rsaExponent, rsaModulus).public_key(default_backend())
+    '''
+    print ("------------pycrypto------------")
+    pub_key, pri_key = generate_rsa_keys()
+    print(pub_key)
+    print(pri_key)
     
     
     
-    
-    
+    print("\n------------cryptography------------")
+    pub_key, pri_key = generate_keys() 
+    print(pub_key)
+    print(pri_key)
+    '''
+    pause()
     
     
 
