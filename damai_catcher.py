@@ -24,6 +24,9 @@ import hashlib
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import NoEncryption,Encoding, PrivateFormat, PublicFormat
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import serialization  
 
 #from crypto import PublicKey
 #from crypto.PublicKey import RSA
@@ -32,8 +35,8 @@ from cryptography.hazmat.primitives.serialization import NoEncryption,Encoding, 
 
 
 class Order_Param(object):
-    ua = UserAgent(use_cache_server=False)
-    ua_chrome=ua.chrome
+    #ua = UserAgent(use_cache_server=False)
+    #ua_chrome=ua.chrome
     ua_chrome = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"  #seems related with ua
     itemId = 607400046123
     price = 298
@@ -355,57 +358,15 @@ class APITool(QObject):
 if __name__ == '__main__':
     
     time1 = time.time()
-    password = "Um111111"
+    password = b"Um111111"
     #rsaExponent = "010001"
     rsaExponent = '010001'
     #rsaExponent = 65537
     rsaModulus = 'd3bcef1f00424f3261c89323fa8cdfa12bbac400d9fe8bb627e8d27a44bd5d59dce559135d678a8143beb5b8d7056c4e1f89c4e1f152470625b7b41944a97f02da6f605a49a93ec6eb9cbaf2e7ac2b26a354ce69eb265953d2c29e395d6d8c1cdb688978551aa0f7521f290035fad381178da0bea8f9e6adce39020f513133fb'
     
-    def generate_rsa_keys():
-        """crpyto install need gcc and python-devel
-        pip install pycrypto
-        """
-        random_generator = Random.new().read
-        key = RSA.generate(1024, random_generator)
-        pub_key = key.publickey()
-        print(pub_key)
     
-        public_key = pub_key.exportKey("PEM")
-        private_key = key.exportKey("PEM")
-        return public_key, private_key
-
     
-    def generate_keys():
-        """
-        pip install cryptography
-        """
-        private_key = rsa.generate_private_key(
-            public_exponent=65537,
-            #key_size=1024,
-            #backend=default_backend(),
-            key_size=256,
-            backend=rsaModulus
-        )
-        
-        #print(default_backend().)
-        
-        serialized_private_key = private_key.private_bytes(
-            Encoding.PEM,
-            PrivateFormat.PKCS8,
-            NoEncryption()
-        )
-        
-        public_key = private_key.public_key()
-        print(public_key)
-        
-        serialized_public_key = public_key.public_bytes(
-            Encoding.PEM,
-            PublicFormat.SubjectPublicKeyInfo,
-        )
-    
-        return serialized_public_key, serialized_private_key
-    
-    def populate_public_key(rsaExponent, rsaModulus):
+    def rsa_encrypt(message,rsaExponent, rsaModulus):
         '''
         根据cryptography包下的rsa模块，对指数模数进行处理生成公钥
         :param rsaExponent:指数
@@ -416,34 +377,35 @@ if __name__ == '__main__':
         rsaModulus = int(rsaModulus, 16)
     
         pubkey = rsa.RSAPublicNumbers(rsaExponent, rsaModulus).public_key(default_backend())
+        
+        pem = pubkey.public_bytes(  encoding=serialization.Encoding.PEM,  format=serialization.PublicFormat.SubjectPublicKeyInfo   )  
+  
+        
+        
+        print("pub:",pubkey)
+        print("pem:",pem)
 
-        return pubkey
+        
+        #message = b"encrypted data"
+        print(message)
+    
+        ciphertext = pubkey.encrypt(
+            message,
+            padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                                        algorithm=hashes.SHA256(),
+                                        label=None ) 
+            )
+        
+        print(ciphertext)
 
-    
-    pubkey = populate_public_key(rsaExponent, rsaModulus)
-    print(pubkey)
-    
-    
-    #key = rsa.RSAPublicNumbers(rsaExponent, rsaModulus).public_key(default_backend())
-    '''
-    print ("------------pycrypto------------")
-    pub_key, pri_key = generate_rsa_keys()
-    print(pub_key)
-    print(pri_key)
-    
-    
-    
-    print("\n------------cryptography------------")
-    pub_key, pri_key = generate_keys() 
-    print(pub_key)
-    print(pri_key)
-    '''
-    pause()
-    
-    
+        
 
+        
+        return ciphertext
     
-    
+    ciphertext = rsa_encrypt(password,rsaExponent, rsaModulus)
+    input()
+
     APITool.login2_damai()
     APITool.get_umjson()
     APITool.check_name()
