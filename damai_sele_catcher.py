@@ -8,9 +8,12 @@ Created on 2019��12��3��
 
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 # ���� WebDriver ����ָ��ʹ��chrome���������
 
+desired_capabilities = DesiredCapabilities.CHROME  # 修改页面加载策略
+desired_capabilities["pageLoadStrategy"] = "none"  # 注释这两行会导致最后输出结果的延迟，即等待页面加载完成再输出
 
 
 option = ChromeOptions()
@@ -29,8 +32,9 @@ time.sleep(2)
 wd.find_element_by_xpath("//span[@class='span-box-header span-user']").click()
 time.sleep(2)
 
-wd.switch_to.frame('alibaba-login-box')
+#wd.switch_to.frame('alibaba-login-box')
 input()
+timer1 = time.time()
 '''
 wd.find_element_by_id('fm-login-id').send_keys("13764288196")  
 
@@ -44,8 +48,12 @@ wd.find_element_by_xpath("//button[text()='登录']").click()
 wd.get("https://detail.damai.cn/item.htm?spm=a2oeg.home.card_0.ditem_0.492a23e1L4m6MG&id=609134671437")
 wd.find_element_by_xpath("//div[text()='看台680元']").click()
 wd.find_element_by_xpath("//div[@class='buybtn']").click()
+wd.find_element_by_xpath("//span[text()='杨佳楣']/preceding-sibling::span").click()
 wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span").click()
-input()
-wd.find_element_by_xpath("//button[@class='next-btn next-btn-normal next-btn-medium'][text()='同意以上协议并提交订单']").click()
+
+timer2 = time.time()
+print(timer2-timer1)
+#input()
+#wd.find_element_by_xpath("//button[@class='next-btn next-btn-normal next-btn-medium'][text()='同意以上协议并提交订单']").click()
 #wd.find_element_by_class_name('fm-button fm-submit password-login').click()
 
