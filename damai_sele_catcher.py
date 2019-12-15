@@ -9,6 +9,7 @@ Created on 2019��12��3��
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 # ���� WebDriver ����ָ��ʹ��chrome���������
 
@@ -28,9 +29,9 @@ wd.maximize_window()
 #input()
 wd.get("https://www.damai.cn/?spm=a2oeg.home.top.dhome.176723e1XwFz3i")
 #wd.get('https://passport.damai.cn/login?ru=https%3A%2F%2Fwww.damai.cn%2F')
-time.sleep(2)
+time.sleep(1)
 wd.find_element_by_xpath("//span[@class='span-box-header span-user']").click()
-time.sleep(2)
+time.sleep(1)
 
 #wd.switch_to.frame('alibaba-login-box')
 input()
@@ -45,15 +46,22 @@ wd.find_element_by_id('fm-login-password').send_keys("Um111111")
 wd.find_element_by_xpath("//button[text()='登录']").click()
 '''
 #print(wd.get_cookies())
-wd.get("https://detail.damai.cn/item.htm?spm=a2oeg.home.card_0.ditem_0.492a23e1L4m6MG&id=609134671437")
+#wd.get("https://detail.damai.cn/item.htm?spm=a2oeg.home.card_0.ditem_0.492a23e1L4m6MG&id=609134671437")
+wd.get("https://detail.damai.cn/item.htm?id=609134671437")
 wd.find_element_by_xpath("//div[text()='看台680元']").click()
 wd.find_element_by_xpath("//div[@class='buybtn']").click()
-wd.find_element_by_xpath("//span[text()='杨佳楣']/preceding-sibling::span").click()
-wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span").click()
+#wd.find_element_by_xpath("//span[text()='杨佳楣']/preceding-sibling::span").click()
 
+#wd.execute_script(myjs)
+dr = wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span//input");
+#wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span//input").click()
+#print(dr.get_attribute('outerHTML'))
+ActionChains(wd).click(dr).perform()
+
+wd.find_element_by_xpath("//button[@class='next-btn next-btn-normal next-btn-medium'][text()='同意以上协议并提交订单']").click()
 timer2 = time.time()
 print(timer2-timer1)
 #input()
-#wd.find_element_by_xpath("//button[@class='next-btn next-btn-normal next-btn-medium'][text()='同意以上协议并提交订单']").click()
+
 #wd.find_element_by_class_name('fm-button fm-submit password-login').click()
 
