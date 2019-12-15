@@ -55,7 +55,7 @@ wd.find_element_by_xpath("//div[@class='buybtn']").click()
 #wd.execute_script(myjs)
 dr = wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span//input");
 #wd.find_element_by_xpath("//span[text()='胡超晔']/preceding-sibling::span//input").click()
-#print(dr.get_attribute('outerHTML'))
+print(dr.get_attribute('outerHTML'))
 ActionChains(wd).click(dr).perform()
 
 wd.find_element_by_xpath("//button[@class='next-btn next-btn-normal next-btn-medium'][text()='同意以上协议并提交订单']").click()
