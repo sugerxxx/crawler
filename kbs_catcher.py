@@ -18,14 +18,12 @@ import random
 class URL(object):
     
     #login POST
-#     loginName: qianxt0929
-#     postfix: @tpl.cntaiping.com
-#     password: VHAxMjM0NTY=
+
 #      Tp123456
 
-    login_dict = {'loginName': 'qianxt0929',
-                        'postfix': '@tpl.cntaiping.com',
-                        'password': "I5Qvm2wkzUPSmFr9WPBwGQ=="}
+    login_dict = {'loginName': 'username',
+                        'postfix': '@doname',
+                        'password': "hash_password"}
     login_url = "http://10.21.0.2/kbs/login"
     
     
