@@ -32,7 +32,7 @@ class URL(object):
     study_url = ""
     system_url = ""
     
-    prelogin_url = "http://10.21.0.2/study/sso/preLogin?loginName=qianxt0929@tpl.cntaiping.com&SESSION_ID=##SESSION_ID##!##########&SESSION_LOGIN_MODE=LOGIN_MODE_LOCAL&t="
+    prelogin_url = "xxx"
     
     #query product GET
 #     categoryId: 4ec1cea5761b3066674699
